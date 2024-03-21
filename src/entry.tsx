@@ -1,11 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Header from "./Header.tsx";
-import Main from "./Main.tsx";
+import Home from "./Home.tsx";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Header />
-    <Main />
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </Router>
   </React.StrictMode>,
 )
