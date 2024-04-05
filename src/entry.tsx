@@ -7,6 +7,7 @@ import 'normalize.css';
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Root from "./routes/Root.tsx";
 import BookPage from "./routes/BookPage.tsx";
+import 'virtual:uno.css'
 
 const router = createBrowserRouter([
   {

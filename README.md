@@ -28,3 +28,4 @@
 * [ ] g. Responsive Design
 #### Potenciais adicionais 
 * [ ] Meter historia de pesquisa
+* [ ] From author
