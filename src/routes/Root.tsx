@@ -1,5 +1,5 @@
-import Header from "./Header.tsx";
 import {Outlet} from "react-router-dom";
+import Header from "../Components/Header.tsx";
 
 export default function Root() {
   return <>

@@ -1,14 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Header from "./Header.tsx";
 import Home from "./Home.tsx";
-import {BrowserRouter as Router, Routes, Route, createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import "bulma"
 import 'normalize.css';
-import ErrorPage from "./ErrorPage.tsx";
-import Root from "./Root.tsx";
-import BookPage from "./BookPage.tsx";
-
+import ErrorPage from "./routes/ErrorPage.tsx";
+import Root from "./routes/Root.tsx";
+import BookPage from "./routes/BookPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -31,12 +29,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/book/" element={<Home />} />
-      </Routes>
-    </Router>
+    <RouterProvider router={router}  />
   </React.StrictMode>,
 )
