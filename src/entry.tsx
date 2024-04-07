@@ -1,13 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Home from "./Home.tsx";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+
 import "bulma"
 import 'normalize.css';
+import 'virtual:uno.css'
+
+import Home from "./routes/Home.tsx";
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Root from "./routes/Root.tsx";
 import BookPage from "./routes/BookPage.tsx";
-import 'virtual:uno.css'
+
 
 const router = createBrowserRouter([
   {
