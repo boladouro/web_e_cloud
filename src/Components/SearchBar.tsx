@@ -1,28 +1,33 @@
-import {Button, Form} from 'react-bulma-components'
-import { Form as RDForm} from "react-router-dom";
-
+import {Form} from "react-router-dom";
 import React from "react";
+import Icon from "./Icon.tsx";
+import {FaSearch} from "react-icons/fa";
+import {Button} from "react-bulma-components";
+import styled from 'styled-components';
+
+const WithSearch = styled.div`
+  
+  &:after {
+    // write the icon here
+    content: "🔍"; // TODO replace with icon
+    animation: none;
+    display: block;
+    position: absolute !important;
+    z-index: 4;
+    top: 0.5em;
+    inset-inline-end: 0.75em;
+  }
+`;
 
 export function SearchBar() {
   return <>
-    <RDForm method={"get"} action={""}>
-      <Form.Field kind="addons">
-        <Form.Control>
-          <Form.Input
-            placeholder="Screen name"
-            type="search"
-            name="screen_name"
-            value={"temp"}
-            onChange={handleChange}
-          />
-        </Form.Control>
-        <Form.Control>
-          <Button color="info" onClick={handleSearch} type={"submit"}>
-            Search
-          </Button>
-        </Form.Control>
-      </Form.Field>
-    </RDForm>
+    <Form method={"get"} action={""}>
+      <div className="field has-addons">
+        <WithSearch className="control">
+          <input className="input" type="text" placeholder="Book"/> {/* TODO add placeholder from random from popular */}
+        </WithSearch>
+      </div>
+    </Form>
   </>
 }
 
