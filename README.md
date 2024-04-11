@@ -1,5 +1,7 @@
 # Projecto de Projetos em Ambientes Web e Cloud
 
+NOTA: LEMBRAR DE VER OS TODOS
+
 ## Funcionalidades
 ###    1. Página inicial
 * [ ] a. Seção com destaque para os livros com maior pontuação;

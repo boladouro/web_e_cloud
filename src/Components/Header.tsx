@@ -1,8 +1,9 @@
 // https://react-restart.github.io/ui/
 
-import {useState} from "react";
+import React, {useState} from "react";
 import {SearchBar} from "./SearchBar.tsx";
 import styled from "styled-components";
+import {useLocation} from "react-router-dom";
 
 const NoBackgroundItem = styled.a`
   &:hover {
@@ -15,6 +16,10 @@ const NoBackgroundItem = styled.a`
 
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header() {
+  const location = useLocation();
+  React.useEffect(() => {
+
+  }, [location])
   return (
     <nav className={"navbar"} role={"navigation"}>
       <div className={"navbar-brand"}>
@@ -31,7 +36,9 @@ function Header() {
               <a className={"navbar-item"}>Top Rated</a>
             </div>
           </div>
-          <NoBackgroundItem className={"navbar-item hover:cursor-default"}><SearchBar className={"w100"} size={"normal"}/></NoBackgroundItem>
+          <NoBackgroundItem className={
+            `navbar-item hover:cursor-default ${location.pathname == "/" ? "hidden": ""}`
+          }><SearchBar className={"w100"} size={"normal"}/></NoBackgroundItem>
         </div>
 
         <div className={"navbar-end"}>

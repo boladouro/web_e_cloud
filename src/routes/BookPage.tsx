@@ -1,4 +1,4 @@
-import { Book } from "../Components/Book"
+import {Book} from "../types/types.ts";
 
 const myBook: Book = {
   id: "1",

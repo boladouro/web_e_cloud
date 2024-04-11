@@ -10,23 +10,29 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "checkTs": "tsc",
-    "updateDeps": "npx npm-check-updates"
+    "updateDeps": "npx npm-check-updates",
+    "start-json-server": "json-server --watch db.json --port 3030"
   },
   "dependencies": {
     "@restart/ui": "^1.6.8",
     "bulma": "^1.0.0",
+    "bulma-carousel": "^4.0.24",
+    "json-server": "^1.0.0-alpha.23",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-bulma-components": "^4.1.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.22.3",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-slick": "^0.23.13",
     "@types/styled-components": "^5.1.34",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",

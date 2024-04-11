@@ -5,6 +5,8 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import "bulma"
 import 'normalize.css';
 import 'virtual:uno.css'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import Home from "./routes/Home.tsx";
 import ErrorPage from "./routes/ErrorPage.tsx";
@@ -38,4 +40,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )
 
 
-export type BulmaSize = "small" | "normal" | "medium" | "large"
