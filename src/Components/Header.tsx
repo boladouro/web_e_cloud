@@ -1,44 +1,44 @@
 // https://react-restart.github.io/ui/
-import {Nav, NavItem as ReNavItem, Button, NavItemProps, Dropdown} from "@restart/ui";
 
-import {DynamicRefForwardingComponent} from "@restart/ui/types";
-import {FC, useState} from "react";
-import {UseDropdownToggleProps} from "@restart/ui/DropdownToggle";
-import {UserDropdownMenuProps} from "@restart/ui/DropdownMenu";
+import {useState} from "react";
+import {SearchBar} from "./SearchBar.tsx";
+import styled from "styled-components";
 
-const NavItem: FC<NavItemProps> = ({children, ...props}) => {
-  return <ReNavItem as={"a"} {...props}>{children}</ReNavItem>
-}
+const NoBackgroundItem = styled.a`
+  &:hover {
+    background-color: transparent !important;
+  }
+`;
+
+
+
+
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header() {
-
-  const [dropdownShow, setDropdownShow] = useState(true)
-
   return (
-    <Nav className={"navbar"} role={"navigation"}>
+    <nav className={"navbar"} role={"navigation"}>
       <div className={"navbar-brand"}>
-        <NavItem className={"navbar-item"}>
+        <NoBackgroundItem className={"navbar-item"}>
           <img src={"/vite.svg"} alt={"logo"}/>
-        </NavItem>
+        </NoBackgroundItem>
       </div>
       <div className={"navbar-menu"} id={"header-menu"}>
         <div className={"navbar-start"}>
-          <NavItem className={"navbar-item has-dropdown"}>
-            <Dropdown show={false} onToggle={(nextShow) => setDropdownShow(nextShow)} placement={"bottom-end"}>
-              <Dropdown.Toggle>
-                {(props: UseDropdownToggleProps) => <a className={"navbar-link"}>Discover</a>}
-              </Dropdown.Toggle>
-              <Dropdown.Menu usePopper={false}>
-                {(props: UserDropdownMenuProps) => (<a className={dropdownShow ? "navbar-dropdown is-active" : "navbar-dropdown"}>Dropdown</a>)}
-              </Dropdown.Menu>
-            </Dropdown>
-          </NavItem>
+          <div className={"navbar-item has-dropdown is-hoverable"}>
+            <a className={"navbar-link"}>Discover</a>
+            <div className={"navbar-dropdown"}>
+              <a className={"navbar-item"}>New</a>
+              <a className={"navbar-item"}>Top Rated</a>
+            </div>
+          </div>
+          <NoBackgroundItem className={"navbar-item hover:cursor-default"}><SearchBar className={"w100"} size={"normal"}/></NoBackgroundItem>
         </div>
+
         <div className={"navbar-end"}>
           {/*TODO shopping cart*/}
         </div>
       </div>
-    </Nav>
+    </nav>
   )
 }
 
