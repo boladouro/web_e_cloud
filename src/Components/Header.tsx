@@ -15,13 +15,13 @@ const NoBackgroundItem = styled.a`
 
 
 // TODO add burger https://bulma.io/documentation/components/navbar/
-function Header() {
+function Header({spacing= "h10vh"}) {
   const location = useLocation();
   React.useEffect(() => {
 
   }, [location])
   return (
-    <nav className={"navbar"} role={"navigation"}>
+    <nav className={`navbar is-fixed-top ${spacing}`} role={"navigation"}>
       <div className={"navbar-brand"}>
         <NoBackgroundItem className={"navbar-item"}>
           <img src={"/vite.svg"} alt={"logo"}/>
@@ -36,7 +36,7 @@ function Header() {
               <a className={"navbar-item"}>Top Rated</a>
             </div>
           </div>
-          <NoBackgroundItem className={
+          <NoBackgroundItem id={"header-search-bar"} className={
             `navbar-item hover:cursor-default ${location.pathname == "/" ? "hidden": ""}`
           }><SearchBar className={"w100"} size={"normal"}/></NoBackgroundItem>
         </div>
