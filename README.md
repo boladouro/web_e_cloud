@@ -12,7 +12,7 @@
     * Podemos roubar o layout da gmail pra isto
 * [ ] e. Botão que permite adicionar livro ao carrinho.
 ### 3. Página individual de cada livro
-* [ ] a. Informação completa de cada Livro
+* [x] a. Informação completa de cada Livro
 * [ ] b. Botão para adicionar livro ao carrinho de compra
 ### 4. Página Carrinho
 * [ ] a. Lista de todos os livros adicionados à lista de compra;
