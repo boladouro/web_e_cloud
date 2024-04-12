@@ -16,7 +16,7 @@ export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, cl
   font-size: var(--bulma-size-${size});
 `;
   return (
-    <div className="field has-addons">
+    <div className="field has-addons important:mb0">
       <div className="control">
         <input className={`input is-${size} ${className}`} type="text" placeholder="Título, Autor, ou tema"/>
         <SearchIcon />

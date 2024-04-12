@@ -60,7 +60,7 @@ function Home() {
       <HomeH1>Livros de Qualidade à tua Disposição</HomeH1>
       <div>
         <SearchBar className={"w-3xl"} size={"medium"}/>
-        <Waypoint onPositionChange={
+        <Waypoint rootMargin={{top:-60}} onPositionChange={// I don't understand how top is calculated but it works
           (details, entry) => {
             const headerSearchBar = document.getElementById("header-search-bar")
             if(!headerSearchBar) { return }
