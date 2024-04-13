@@ -1,5 +1,4 @@
 // https://react-restart.github.io/ui/
-
 import {useState} from "react";
 import {SearchBar} from "./SearchBar.tsx";
 import styled from "styled-components";
