@@ -1,5 +1,4 @@
 import React from "react";
-import { Form } from "react-router-dom";
 import styled from 'styled-components';
 import { FaCartPlus } from 'react-icons/fa';
 import {BulmaSize} from "../types/types.ts"; // Import the Font Awesome icon

@@ -1,8 +1,7 @@
 // https://react-restart.github.io/ui/
 
-import React, {useState} from "react";
+import React from "react";
 import {SearchBar} from "./SearchBar.tsx";
-import styled from "styled-components";
 import {Link, useLocation} from "react-router-dom";
 
 

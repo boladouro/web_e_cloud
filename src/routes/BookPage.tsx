@@ -1,5 +1,5 @@
 import {Book} from "../types/types.ts";
-import {LoaderFunction, Navigate, Params, useLoaderData, useParams} from "react-router-dom";
+import {Navigate, useLoaderData, useParams} from "react-router-dom";
 import React from "react";
 import {BookComponent} from "../Components/Book.tsx";
 

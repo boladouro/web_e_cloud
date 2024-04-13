@@ -15,6 +15,7 @@ import Root from "./routes/Root.tsx";
 
 import BookPage from "./routes/BookPage.tsx";
 import {ShouldRevalidateFunctionArgs} from "@remix-run/router/utils.ts";
+import {bookLoader} from "./loaders.ts";
 
 
 // TODO add dynamic document title
