@@ -67,6 +67,5 @@ export default function BookPage() {
         </li>
       </ul>
     </div>
-
   </>
 }

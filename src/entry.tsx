@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom/client'
+import { useState, createContext } from "react";
 import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
 
 import "bulma"
@@ -11,6 +12,10 @@ import "slick-carousel/slick/slick-theme.css";
 import Home from "./routes/Home.tsx";
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Root from "./routes/Root.tsx";
+import BookPage from "./routes/BookPage.tsx";
+import Cart from "./routes/Cart.tsx";
+
+
 import BookPage, {bookLoader} from "./routes/BookPage.tsx";
 import {ShouldRevalidateFunctionArgs} from "@remix-run/router/utils.ts";
 
