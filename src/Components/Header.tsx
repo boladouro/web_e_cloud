@@ -11,7 +11,7 @@ import {Link, useLocation} from "react-router-dom";
 // TODO add Links
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header({spacing= "h10vh"}) {
-  const location = useLocation();
+  const location = useLocation(); // TODO ver se posso tirar isto
   React.useEffect(() => {
 
   }, [location])

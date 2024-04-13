@@ -1,12 +1,12 @@
 import React from "react";
 import { Form } from "react-router-dom";
 import styled from 'styled-components';
-import { FaCartPlus } from 'react-icons/fa'; // Import the Font Awesome icon
-import { BulmaSize } from "../entry.tsx";
+import { FaCartPlus } from 'react-icons/fa';
+import {BulmaSize} from "../types/types.ts"; // Import the Font Awesome icon
 
 
 
-export function Buybutton({size = "medium", className = ""}:{size: BulmaSize, className?: string}) {
+export function Buybutton({size = "medium"}:{size: BulmaSize, className?: string}) {
   const BuyIcon = styled(FaCartPlus)`
   top: 32%;
   right: 0.75em;
