@@ -3,17 +3,12 @@
 import React, {useState} from "react";
 import {SearchBar} from "./SearchBar.tsx";
 import styled from "styled-components";
-import {useLocation} from "react-router-dom";
-
-const NoBackgroundItem = styled.a`
-  &:hover {
-    background-color: transparent !important;
-  }
-`;
+import {Link, useLocation} from "react-router-dom";
 
 
 
 
+// TODO add Links
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header({spacing= "h10vh"}) {
   const location = useLocation();
@@ -23,9 +18,9 @@ function Header({spacing= "h10vh"}) {
   return (
     <nav className={`navbar is-fixed-top ${spacing}`} role={"navigation"}>
       <div className={"navbar-brand"}>
-        <NoBackgroundItem className={"navbar-item"}>
+        <Link to={"/"} className={"navbar-item important:hover:bg-transparent"}>
           <img src={"/vite.svg"} alt={"logo"}/>
-        </NoBackgroundItem>
+        </Link>
       </div>
       <div className={"navbar-menu"} id={"header-menu"}>
         <div className={"navbar-start"}>
@@ -36,9 +31,9 @@ function Header({spacing= "h10vh"}) {
               <a className={"navbar-item"}>Top Rated</a>
             </div>
           </div>
-          <NoBackgroundItem id={"header-search-bar"} className={
-            `navbar-item hover:cursor-default ${location.pathname == "/" ? "hidden": ""}`
-          }><SearchBar className={"w100"} size={"normal"}/></NoBackgroundItem>
+          <a id={"header-search-bar"} className={
+            `navbar-item hover:cursor-default important:hover:bg-transparent ${location.pathname == "/" ? "hidden": ""}`
+          }><SearchBar className={"w100"} size={"normal"}/></a>
         </div>
 
         <div className={"navbar-end"}>
