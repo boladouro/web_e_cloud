@@ -1,16 +1,30 @@
 import {Book} from "../types/types.ts";
-import {useLocation} from "react-router-dom";
+import {Link, Navigate, useLocation, useParams} from "react-router-dom";
 import React from "react";
-import {LoaderFunction, Params, useLoaderData} from "react-router-dom";
+import {LoaderFunction, Params, useLoaderData, LoaderFunctionArgs, json} from "react-router-dom";
 
-export const bookLoader: LoaderFunction<Book> = ({params}: {request: Request, params: Params<string>}) => {
-	return fetch(`https://localhost:3030/books/4`).then(res => res.json())
+export const bookLoader: LoaderFunction<Book> = async ({params}: {request: Request, params: Params<string>}): Promise<Book> => {
+	const response = await fetch(`http://localhost:3030/books/${params.bookId}`)
+  if (response.ok) {
+    return response.json();
+  } else if (response.status == 404){
+    throw new Response("Book not found", {status: 404})
+  } else {
+    throw response
+  }
 }
 
 export default function BookPage() {
+  const {bookId, bookTitle} = useParams()
   const book: Book = useLoaderData() as Book;
+  if (!bookTitle) {
+    return <Navigate to={`/books/${bookId}/no-title`} replace/>
+  }
   console.log("book", book)
   return <>
+    <Link to={"/books/20"}>toBook20</Link>
+    <br />
+    <Link to={"/books/20/aodfhasohda"}>toBook20Withthing</Link>
     <div className="component">
       <ul className="align">
         <li>

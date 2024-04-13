@@ -12,7 +12,6 @@ import Home from "./routes/Home.tsx";
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Root from "./routes/Root.tsx";
 import BookPage, {bookLoader} from "./routes/BookPage.tsx";
-import {Book} from "./types/types.ts";
 import {ShouldRevalidateFunctionArgs} from "@remix-run/router/utils.ts";
 
 
@@ -32,7 +31,7 @@ const router = createBrowserRouter([
         element: <Home/>
       },
       {
-        path: "books/:bookId/:title?",
+        path: "books/:bookId/:bookTitle?",
         element: <BookPage/>,
         loader: bookLoader,
         shouldRevalidate: (args: ShouldRevalidateFunctionArgs) => {
