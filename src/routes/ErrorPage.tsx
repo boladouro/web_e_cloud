@@ -5,6 +5,6 @@ export default function ErrorPage() {
   console.log(error)
   return (
     // @ts-expect-error error is unkown status
-    <h1>Error: {error?.statusText ?? error?.message ?? "Unkown"}</h1>
+    <h1>Error {error?.status}: {error?.statusText ?? error?.message ?? "Unkown"}</h1>
   )
 }

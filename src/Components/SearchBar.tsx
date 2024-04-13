@@ -1,8 +1,8 @@
 import React from "react";
 import { Form } from "react-router-dom";
 import styled from 'styled-components';
-import { FaSearch } from 'react-icons/fa'; // Import the Font Awesome icon
-import { BulmaSize } from "../entry.tsx";
+import { FaSearch } from 'react-icons/fa';
+import {BulmaSize} from "../types/types.ts"; // Import the Font Awesome icon
 
 
 
@@ -16,9 +16,9 @@ export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, cl
   font-size: var(--bulma-size-${size});
 `;
   return (
-    <div className="field has-addons">
+    <div className="field has-addons important:mb0">
       <div className="control">
-        <input className={`input is-${size} ${className}`} type="text" placeholder="Book"/>
+        <input className={`input is-${size} ${className}`} type="text" placeholder="Título, Autor, ou tema"/>
         <SearchIcon />
       </div>
     </div>
