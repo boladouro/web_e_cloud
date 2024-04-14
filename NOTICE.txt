@@ -9,6 +9,9 @@ Works under MIT License (MIT)    Copyright notices:
 - unocss                         Copyright (c) 2021-PRESENT Anthony Fu <https://github.com/antfu>
 - react-icons                    Copyright 2018 kamijin_fanta <kamijin@live.jp>
 - styled components              Copyright (c) 2016-present Glen Maddern and Maximilian Stoiber
+- slick-carousel                 Copyright (c) 2013-2016
+- react-slick                    Copyright (c) 2014 Kiran Abburi
+- json-server                    Copyright (c) 2015 typicode
 ------------------------------------------------------------------------------------------------------------------------
 The MIT License (MIT)
 
@@ -211,4 +214,9 @@ Works under Apache License 2.0  A copy of the attribution notices can be found o
 
    END OF TERMS AND CONDITIONS
 ------------------------------------------------------------------------------------------------------------------------
-please don't use gpl or restrictive licenses thanks
+------------------------------------------------------------------------------------------------------------------------
+Notes:
+- json-server's v0 is under MIT License, v1 under Fair Source License
+  (which is confusing since there's no payment option)
+  I'm using an adapted version of v0, and its copyright notice is noted above.
+- please don't use gpl or "same license" licenses, they're confusing. thanks.

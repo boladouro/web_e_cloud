@@ -16,7 +16,6 @@
   "dependencies": {
     "@restart/ui": "^1.6.8",
     "bulma": "^1.0.0",
-    "bulma-carousel": "^4.0.24",
     "json-server": "github:notPlancha/json-server#v0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
