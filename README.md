@@ -4,7 +4,7 @@ NOTA: LEMBRAR DE VER OS TODOS
 
 ## Funcionalidades
 ###    1. Página inicial
-* [ ] a. Seção com destaque para os livros com maior pontuação;
+* [x] a. Seção com destaque para os livros com maior pontuação;
 * [ ] b. Campo de pesquisa. Utilizador poderá escrever a frase de pesquisa eselecionar se pretende pesquisar por autor, título ou categoria.
 ### 2. Página Livros
 * [ ] a. Lista em forma de grelha com todos os livros;

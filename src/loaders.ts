@@ -11,5 +11,3 @@ export const bookLoader: LoaderFunction<Book> = async ({params}: {request: Reque
     throw response
   }
 }
-
-// TODO loader from home page to here

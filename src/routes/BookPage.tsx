@@ -7,7 +7,7 @@ export default function BookPage() {
   const {bookId, bookTitle} = useParams()
   const book: Book = useLoaderData() as Book;
   if (!bookTitle) {
-    return <Navigate to={`/books/${bookId}/${book.title.replaceAll(" ", "-")}`} replace/>
+    return <Navigate to={`/book/${bookId}/${book.title.replaceAll(" ", "-")}`} replace/>
   }
   console.log("book", book)
   return <BookComponent props={book}/>

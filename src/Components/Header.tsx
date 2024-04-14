@@ -15,7 +15,7 @@ function Header({spacing= "h10vh"}) {
 
   }, [location])
   return (
-    <nav className={`navbar is-fixed-top ${spacing}`} role={"navigation"}>
+    <nav className={`navbar is-fixed-top ${spacing} max-h-60px`} role={"navigation"}>
       <div className={"navbar-brand"}>
         <Link to={"/"} className={"navbar-item important:hover:bg-transparent"}>
           <img src={"/vite.svg"} alt={"logo"}/>
@@ -34,7 +34,6 @@ function Header({spacing= "h10vh"}) {
             `navbar-item hover:cursor-default important:hover:bg-transparent ${location.pathname == "/" ? "hidden": ""}`
           }><SearchBar className={"w100"} size={"normal"}/></a>
         </div>
-
         <div className={"navbar-end"}>
           {/*TODO shopping cart*/}
         </div>

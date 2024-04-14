@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         element: <Home/>
       },
       {
-        path: "books/:bookId/:bookTitle?",
+        path: "book/:bookId/:bookTitle?",
         element: <BookPage/>,
         loader: bookLoader,
         shouldRevalidate: (args: ShouldRevalidateFunctionArgs) => {
@@ -42,6 +42,9 @@ const router = createBrowserRouter([
           return !(args.currentParams.bookId == args.nextParams.bookId && !args.currentParams.title);
         }
       },
+      {
+        path: "search/"
+      }
     ]
   },
 ]);
