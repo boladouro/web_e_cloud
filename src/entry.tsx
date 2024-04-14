@@ -15,7 +15,8 @@ import Root from "./routes/Root.tsx";
 
 import BookPage from "./routes/BookPage.tsx";
 import {ShouldRevalidateFunctionArgs} from "@remix-run/router/utils.ts";
-import {bookLoader} from "./loaders.ts";
+import {bookLoader, searchLoader} from "./loaders_contexts.ts";
+import Search from "./routes/Search.tsx";
 
 
 // TODO add dynamic document title
@@ -43,7 +44,9 @@ const router = createBrowserRouter([
         }
       },
       {
-        path: "search/"
+        path: "search/",
+        element: <Search />,
+        loader: searchLoader
       }
     ]
   },

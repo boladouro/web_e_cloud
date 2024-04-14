@@ -14,13 +14,11 @@ const HomeH1 = styled.h1`
   line-height: 1.125em;
 `;
 
-
-// TODO maybe add skeleton https://reactrouter.com/en/main/components/await
 function Home() {
   console.log("Home component rendered");
   const numberOfBooksForSlider = 8
   const fetchBooksByPopularity: () => Promise<Book[]> = async () => {
-    const response = await fetch(`http://localhost:3030/books?_limit=${numberOfBooksForSlider}&_sort=-score,-publishedDate.$date`) // if this was long time data a filter could also be applied for only recent
+    const response = await fetch(`http://localhost:3030/books?_limit=${numberOfBooksForSlider}&_sort=score,publishedDate.$date&_order=desc,desc`) // if this was long time data a filter could also be applied for only recent
     return response.json()
   }
   const [books, setBooks] = React.useState<Book[]>([])
@@ -75,6 +73,7 @@ function Home() {
     </div>
     <div className={"p-t1vh p-l4 p-r4"}>
       <h1>Destaques</h1>
+      {/* TODO add skeleton https://reactrouter.com/en/main/components/await */}
       <StyledSlider className={"mxxl"} {...sliderSettings}>
         {books.map((book: Book) => {
           return <Link to={`/book/${book.id}`} key={book.id} className={"p-4 w10 h2xl"}>

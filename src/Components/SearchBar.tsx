@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {Form, useParams, useSearchParams} from "react-router-dom";
 import styled from 'styled-components';
-import { FaSearch } from 'react-icons/fa';
+import {FaSearch, FaSortDown, FaSortUp} from 'react-icons/fa';
 import {BulmaSize} from "../types/types.ts"; // Import the Font Awesome icon
 
 
@@ -16,12 +16,14 @@ export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, cl
   color: var(--bulma-input-placeholder-color);
   font-size: var(--bulma-size-${size});
 `;
+
   return (
-    <div className="field has-addons important:mb0">
+    <Form method={"get"} action={"/search"} className="field has-addons important:mb0">
       <div className="control">
-        <input className={`input is-${size} ${className}`} type="text" placeholder="Título, Autor, ou tema" defaultValue={searchParams.get("q") ?? ""} />
-        <SearchIcon />
+        <input className={`input is-${size} ${className}`} name={"q"} type="text" placeholder="Título, Autor, ou tema"
+               defaultValue={searchParams.get("q") ?? ""}/>
+        <button role={"button"}><SearchIcon/></button>
       </div>
-    </div>
+    </Form>
   );
 }

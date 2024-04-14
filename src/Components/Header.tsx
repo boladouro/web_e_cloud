@@ -10,10 +10,6 @@ import {Link, useLocation} from "react-router-dom";
 // TODO add Links
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header({spacing= "h10vh"}) {
-  const location = useLocation(); // TODO ver se posso tirar isto
-  React.useEffect(() => {
-
-  }, [location])
   return (
     <nav className={`navbar is-fixed-top ${spacing} max-h-60px`} role={"navigation"}>
       <div className={"navbar-brand"}>
@@ -31,7 +27,7 @@ function Header({spacing= "h10vh"}) {
             </div>
           </div>
           <a id={"header-search-bar"} className={
-            `navbar-item hover:cursor-default important:hover:bg-transparent ${location.pathname == "/" ? "hidden": ""}`
+            `navbar-item hover:cursor-default important:bg-transparent ${location.pathname == "/" ? "hidden": ""}`
           }><SearchBar className={"w100"} size={"normal"}/></a>
         </div>
         <div className={"navbar-end"}>
