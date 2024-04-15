@@ -2,7 +2,7 @@ import {Buybutton} from "./BuyButton";
 import {Book} from "../types/types.ts";
 
 
-export function BookComponent({props}: { props: Book }) {
+export function PrettyBook({props}: { props: Book }) {
   return (
     <div className="component">
       <ul className="align">

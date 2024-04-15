@@ -1,7 +1,7 @@
 import {Book} from "../types/types.ts";
 import {Navigate, useLoaderData, useParams} from "react-router-dom";
 import React from "react";
-import {BookComponent} from "../Components/Book.tsx";
+import {PrettyBook} from "../Components/PrettyBook.tsx";
 
 export default function BookPage() {
   const {bookId, bookTitle} = useParams()
@@ -10,5 +10,5 @@ export default function BookPage() {
     return <Navigate to={`/book/${bookId}/${book.title.replaceAll(" ", "-")}`} replace/>
   }
   console.log("book", book)
-  return <BookComponent props={book}/>
+  return <PrettyBook props={book}/>
 }

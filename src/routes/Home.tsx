@@ -5,7 +5,8 @@ import React, {useContext, useEffect} from "react";
 import {Book} from "../types/types.ts";
 import {FaStar} from "react-icons/fa";
 import Waypoint, {Position} from "@restart/ui/Waypoint";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
+import BookComponent from "../Components/BookComponent.tsx";
 
 const HomeH1 = styled.h1`
   margin-bottom: 1em;
@@ -37,19 +38,21 @@ function Home() {
     variableWidth: true,
     speed: 300,
     adaptiveHeight: true,
-    dots: false
+    dots: false,
   }
 
   const StyledSlider = styled(Slider)`
     .slick-prev::before, .slick-next::before {
-      font-size:30px !important;
+      font-size: 30px !important;
     }
+
     .slick-prev, .slick-next {
       z-index: 1;
     }
-    
+
     .slick-slide {
-      width: 300px;
+      width:17rem;
+      padding: 0 1rem;
     }
   `
   return <>
@@ -57,14 +60,17 @@ function Home() {
       <HomeH1>Livros de Qualidade à tua Disposição</HomeH1>
       <div>
         <SearchBar className={"w-3xl"} size={"medium"}/>
-        <Waypoint rootMargin={{top:-60}} onPositionChange={// I don't understand how top is calculated but it works
+        {/* TODO Waypoint not triggering on leave when changing page (when searching) */}
+        <Waypoint rootMargin={{top: -60}} onPositionChange={// I don't understand how top is calculated but it works
           (details, entry) => {
             const headerSearchBar = document.getElementById("header-search-bar")
-            if(!headerSearchBar) { return }
-            if(details.position == Position.INSIDE) {
-                headerSearchBar.classList.add("hidden")
+            if (!headerSearchBar) {
+              return
+            }
+            if (details.position == Position.INSIDE) {
+              headerSearchBar.classList.add("hidden")
             } else {
-                headerSearchBar.classList.remove("hidden")
+              headerSearchBar.classList.remove("hidden")
             }
           }
         }/>
@@ -75,17 +81,7 @@ function Home() {
       <h1>Destaques</h1>
       {/* TODO add skeleton https://reactrouter.com/en/main/components/await */}
       <StyledSlider className={"mxxl"} {...sliderSettings}>
-        {books.map((book: Book) => {
-          return <Link to={`/book/${book.id}`} key={book.id} className={"p-4 w10 h2xl"}>
-            <img src={book.thumbnailUrl ?? "/nocover.png"} alt={book.title} className={"w-64 h-96 object-tl"} onError={({currentTarget}) => {currentTarget.onerror = null; currentTarget.src = "/nocover.png"}}/>
-            <h2 className={"text-xl"}>{book.title}</h2>
-            <h3 className={"text-4 text-stone"}>{book.authors.join(", ")}</h3>
-            <div className={"flex flex-row flex-justify-between after:content-none before:content-none"}>
-              <h2 className={"text-5 text-orange"}>{book.price}€</h2>
-              <p className={"text-4"}>{Array.from({length: book.score}, (_, ind) => <FaStar key={"star" + ind}/>)}</p>
-            </div>
-          </Link>
-        })}
+        {books.map((book: Book) => <BookComponent book={book}/>)}
       </StyledSlider>
     </div>
   </>
