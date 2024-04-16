@@ -10,10 +10,27 @@ export function PrettyBook({props}: { props: Book }) {
           <figure className='book'>
             <ul className='hardcover_front'>
               <li>
-                <div className="coverDesign blue">
-                  <h1>{props.title}</h1>
+              <div className="coverDesign" style={{backgroundImage: `url("${props.thumbnailUrl}")`, backgroundRepeat: "no-repeat", backgroundSize: "cover"}}>
                   <br/>
-                  <p>€{props.price}</p>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <p className="yellow">€{props.price}</p>
                 </div>
               </li>
               <li></li>
@@ -21,6 +38,7 @@ export function PrettyBook({props}: { props: Book }) {
             <ul className='page'>
               <li></li>
               <li>
+              <h1 className="blue">{props.title}</h1>
                 <h1>Descrition</h1>
                 <p>{props.shortDescription}</p>
                 <h1>Authors</h1>
@@ -28,7 +46,8 @@ export function PrettyBook({props}: { props: Book }) {
                 <h1>Categories</h1>
                 <p>{props.categories}</p>
                 <br/>
-                <Buybutton className={"w-187"} size={"large"}/></li>
+                <Buybutton className={"w-187"} size={"large"}/>
+              </li>
               <li></li>
               <li></li>
               <li>
