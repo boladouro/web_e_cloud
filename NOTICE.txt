@@ -12,6 +12,7 @@ Works under MIT License (MIT)    Copyright notices:
 - slick-carousel                 Copyright (c) 2013-2016
 - react-slick                    Copyright (c) 2014 Kiran Abburi
 - json-server                    Copyright (c) 2015 typicode
+- shadcn-ui                      Copyright (c) 2023 shadcn
 ------------------------------------------------------------------------------------------------------------------------
 The MIT License (MIT)
 
