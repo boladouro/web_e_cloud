@@ -16,7 +16,10 @@
   "dependencies": {
     "@restart/ui": "^1.6.8",
     "bulma": "^1.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
     "json-server": "github:notPlancha/json-server#v0",
+    "lucide-react": "^0.368.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-bulma-components": "^4.1.0",
@@ -25,9 +28,12 @@
     "react-router-dom": "^6.22.3",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "tailwind-merge": "^2.2.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/node": "^20.12.7",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
     "@types/react-router-dom": "^5.3.3",
@@ -36,9 +42,12 @@
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.4.4",
     "unocss": "^0.59.0-beta.1",
     "vite": "^5.2.8"
