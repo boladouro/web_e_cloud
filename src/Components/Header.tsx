@@ -1,15 +1,25 @@
 // https://react-restart.github.io/ui/
 
-import React from "react";
+import React, {useEffect} from "react";
 import {SearchBar} from "./SearchBar.tsx";
 import {Link, useLocation} from "react-router-dom";
 
 
 
 
-// TODO add Links
+// TODO add Links of dropdown
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header({spacing= "h10vh"}) {
+  const location = useLocation()
+  const [searchBarVisible, setSearchBarVisible] = React.useState(false)
+  useEffect(() => {
+    if (location.pathname == "/home") {
+      setSearchBarVisible(false)
+    } else {
+      setSearchBarVisible(true)
+    }
+  }, [location.pathname])
+
   return (
     <nav className={`navbar is-fixed-top ${spacing} max-h-60px`} role={"navigation"}>
       <div className={"navbar-brand"}>
@@ -27,7 +37,7 @@ function Header({spacing= "h10vh"}) {
             </div>
           </div>
           <a id={"header-search-bar"} className={
-            `navbar-item hover:cursor-default important:bg-transparent ${location.pathname == "/" ? "hidden": ""}`
+            `navbar-item hover:cursor-default important:bg-transparent ${searchBarVisible ? "": "hidden"}`
           }><SearchBar className={"w100"} size={"normal"}/></a>
         </div>
         <div className={"navbar-end"}>
