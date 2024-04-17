@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .navbar-brand > .navbar-item:hover{
   background-color: transparent!important;
 }

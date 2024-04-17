@@ -23,7 +23,7 @@ export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderPara
   const urlParams = new URL(request.url).searchParams
   const q = urlParams.get("q")
   if (!q) {
-    throw new Response("Missing search query", {status: 400})
+    return []
   }
   const sort = urlParams.get("sort") ?? "score,publishedDate.$date"
   let order = urlParams.get("order") ?? "desc"
@@ -42,11 +42,5 @@ export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderPara
     `&_page=${page}` +
     `&_limit=10`
   ) // dont care abt sql injection
-  return response.json();
-}
-
-export const GenresContext = React.createContext<string[]>([]);
-export const genresLoader: LoaderFunction<string[]> = async ({request}: loaderParams): Promise<string[]> => {
-  const response = await fetch(`http://localhost:3030/genres`)
   return response.json();
 }

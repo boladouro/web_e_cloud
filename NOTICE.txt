@@ -13,6 +13,7 @@ Works under MIT License (MIT)    Copyright notices:
 - react-slick                    Copyright (c) 2014 Kiran Abburi
 - json-server                    Copyright (c) 2015 typicode
 - shadcn-ui                      Copyright (c) 2023 shadcn
+- tailwindcss                    Copyright (c) Tailwind Labs, Inc.
 ------------------------------------------------------------------------------------------------------------------------
 The MIT License (MIT)
 
@@ -214,6 +215,9 @@ Works under Apache License 2.0  A copy of the attribution notices can be found o
       of your accepting any such warranty or additional liability.
 
    END OF TERMS AND CONDITIONS
+------------------------------------------------------------------------------------------------------------------------
+No license but was used:
+"Go wild" - https://github.com/mxkaske/mxkaske.dev/issues/11#issuecomment-1741747394
 ------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 Notes:

@@ -1,12 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
+import { ThemeProvider } from "@/theme-provider"
 
 import "bulma"
 import 'normalize.css';
 import 'virtual:uno.css'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "./tailwind.css";
 
 import Home from "./routes/Home.tsx";
 import ErrorPage from "./routes/ErrorPage.tsx";
@@ -46,7 +48,7 @@ const router = createBrowserRouter([
       {
         path: "search/",
         element: <Search />,
-        loader: searchLoader
+        loader: searchLoader,
       }
     ]
   },
@@ -54,7 +56,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <ThemeProvider defaultTheme={"system"}>
+      <RouterProvider router={router}/>
+    </ThemeProvider>
   </React.StrictMode>,
 )
 
