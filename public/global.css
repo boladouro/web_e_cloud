@@ -714,3 +714,9 @@ figcaption p {
 		font-size: 90%;
 	}
 }  
+
+
+.text-container {
+    max-height: 100px; 
+    overflow-y: auto; 
+}
