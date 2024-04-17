@@ -5,13 +5,12 @@
   "type": "module",
   "author": {},
   "scripts": {
-    "dev": "vite",
+    "dev": "run-p dev-front dev-back",
+    "dev-front": "vite",
+    "dev-back": "json-server --watch db.json --port 3030",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "checkTs": "tsc",
-    "updateDeps": "npx npm-check-updates",
-    "start-json-server": "json-server --watch db.json --port 3030"
+    "preview-build": "vite preview",
+    "updateDeps": "npx npm-check-updates"
   },
   "dependencies": {
     "@restart/ui": "^1.6.8",
@@ -21,6 +20,7 @@
     "json-server": "github:notPlancha/json-server#v0",
     "lucide-react": "^0.368.0",
     "normalize.css": "^8.0.1",
+    "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
     "react-bulma-components": "^4.1.0",
     "react-dom": "^18.2.0",
