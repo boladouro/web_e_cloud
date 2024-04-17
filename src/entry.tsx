@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
-import { ThemeProvider } from "@/theme-provider"
 
 import "bulma"
 import 'normalize.css';
@@ -56,9 +55,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme={"system"}>
-      <RouterProvider router={router}/>
-    </ThemeProvider>
+    <RouterProvider router={router}/>
   </React.StrictMode>,
 )
 

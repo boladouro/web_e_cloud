@@ -63,18 +63,8 @@ export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, cl
     <Form method={"get"} action={"/search"} className="field has-addons important:mb0">
       <div className="control">
         <input className={`input is-${size} ${className}`} name={"q"} type="text" placeholder="Título, Autor, ou tema"
-               defaultValue={q}/>
-        <Popover>
-          <PopoverTrigger>
-            <Button variant={"outline"} role={"button"}><FilterIcon/></Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            <FilterPopover>
-              <FancyMultiSelect width={"10em"} placeholder={"Categorias"} items={categories.map((val) => {return {value: val, label: val}})}/>
-            </FilterPopover>
-          </PopoverContent>
-        </Popover>
-        <Button variant={"outline"} role={"button"}><SearchIcon/></Button>
+               defaultValue={searchParams.get("q") ?? ""}/>
+        <button role={"button"}><SearchIcon/></button>
       </div>
     </Form>
   );
