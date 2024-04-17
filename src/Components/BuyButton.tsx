@@ -14,7 +14,7 @@ export function Buybutton({size = "medium"}:{size: BulmaSize, className?: string
   font-size: var(--bulma-size-${size});
 `;
   return (
-    <div className="field has-addons">
+    <div className="flex-justify-space-evenly">
       <a href="#"><BuyIcon /></a>
     </div>
   );
