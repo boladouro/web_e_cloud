@@ -40,9 +40,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const remoCart = (bookId: string) => {
-    const updatedBooks = Books.filter((book) => book.id !== bookId);
-    setBooks(updatedBooks);
-    setNBook(NBook - 1);
+    const indexToRemove = Books.findIndex((book) => book.id === bookId);
+    if (indexToRemove !== -1) {
+      const updatedBooks = [...Books.slice(0, indexToRemove), ...Books.slice(indexToRemove + 1)];
+      setBooks(updatedBooks);
+      setNBook(NBook - 1);
+    }
   };
 
   const clearCart = () => {
