@@ -1,5 +1,5 @@
 import {LoaderFunction, Params} from "react-router-dom";
-import {Book, PaginationLinks} from "./types/types.ts";
+import {Book, PaginationLinks} from "./types.ts";
 import {qSeparateColon} from "@/lib/utils.ts";
 
 interface loaderParams {

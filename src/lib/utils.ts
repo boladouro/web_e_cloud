@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { filters, filtersKeys } from "@/types/types.ts";
+import { filters, filtersKeys } from "@/types.ts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

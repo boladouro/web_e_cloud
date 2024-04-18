@@ -1,7 +1,7 @@
 import {FaStar} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import React from "react";
-import {Book} from "../types/types.ts";
+import {Book} from "../types.ts";
 
 export default function BookComponent({book}: {book: Book}) {
     return <Link to={`/book/${book.id}`} key={book.id} className={"p-4 w10 h2xl"}>
