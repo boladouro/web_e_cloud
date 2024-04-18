@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import ReactDOM from 'react-dom/client'
-import { useState, createContext, ReactNode } from "react";
 import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
 
 import "bulma"
@@ -68,10 +67,7 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  
   <React.StrictMode>
-     <CartContext.Provider value={0,0,[] /*{Total ,NBook, Books}*/}>
-      <RouterProvider router={router}/>
-    </CartContext.Provider>
+    <RouterProvider router={router}/>
   </React.StrictMode>,
 );

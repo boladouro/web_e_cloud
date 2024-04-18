@@ -9,7 +9,7 @@ export default function BookComponent({book}: {book: Book}) {
         <h2 className={"text-xl"}>{book.title}</h2>
         <h3 className={"text-3 text-stone "}>{book.authors.join(", ")}</h3>
         <div className={"flex flex-row flex-justify-between after:content-none before:content-none"}>
-            <h2 className={"text-5 text-orange"}>{book.price}€</h2>
+            <h2 className={"text-5 text-orange"}>{book.price ? book.price!.toFixed(2) + "€" : "-"}</h2>
             <p className={"text-4"}>{Array.from({length: book.score}, (_, ind) => <FaStar key={"star" + ind}/>)}</p>
         </div>
     </Link>

@@ -1,6 +1,5 @@
-import {LoaderFunction, Params, redirect} from "react-router-dom";
+import {LoaderFunction, Params} from "react-router-dom";
 import {Book, PaginationLinks} from "./types/types.ts";
-import React from "react";
 import {qSeparateColon} from "@/lib/utils.ts";
 
 interface loaderParams {
@@ -21,7 +20,7 @@ export const bookLoader: LoaderFunction<Book> = async ({params}: loaderParams): 
 }
 
 export type paginationHeaderResult = `<${string}>; rel="${string}"`
-
+// If the price is empty then it' doesn't query but that shouldn't happen irl
 export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderParams): Promise<[Book[], PaginationLinks?]> => {
   // headers.link:
   // <http://localhost:3030/books?q=&_page=1&_limit=10>; rel="first", <http://localhost:3030/books?q=&_page=1&_limit=10>; rel="prev", <http://localhost:3030/books?q=&_page=3&_limit=10>; rel="next", <http://localhost:3030/books?q=&_page=4&_limit=10>; rel="last"
@@ -58,8 +57,8 @@ export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderPara
     `&_limit=10`
   ) // dont care abt sql injection
   console.log(response)
-  if (!response.headers.has("link")) {
-    return [await response.json(), undefined] // TODO verify
+  if (!response.headers.has("link") || response.headers.get("link")!.trim() === "") {
+    return [await response.json(), undefined]
   }
   // @ts-expect-error
   const links: PaginationLinks = {}

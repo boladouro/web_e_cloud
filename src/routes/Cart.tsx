@@ -1,8 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import CartContext from "../Components/cartComponet";
-
-
-const { NBook, Total, Books } = useContext(CartContext);
 
 export default function CartPage() {
     const { NBook, Total, Books } = useContext(CartContext);

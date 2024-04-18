@@ -1,9 +1,7 @@
 import {Book, PaginationLinks} from "../types/types.ts";
 import {useLoaderData, useSearchParams} from "react-router-dom";
-import {PrettyBook} from "../Components/PrettyBook.tsx";
 import BookComponent from "../Components/BookComponent.tsx";
 import React, {useEffect} from "react";
-import {Link} from "react-router-dom";
 
 import {
   Pagination,
@@ -11,8 +9,7 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+
 } from "@/Components/ui/pagination"
 
 // TODO add message to when no book match
@@ -34,7 +31,7 @@ export default function Search() {
   const currPage = parseInt(searchParams.get("page") ?? "1")
   return <>
     <div className={"grid is-col-min-10 before:content-none after:content-none m3"}>
-      {books.map(book => <div className={"cell max-w-20em"}><BookComponent book={book}/></div>)}
+      {books.map(book => <div className={"cell max-w-20em"} key={book.id}><BookComponent book={book}/></div>)}
     </div>
     {paginationLinks && <Pagination>
       <PaginationContent>

@@ -1,11 +1,9 @@
 import {SearchBar} from "../Components/SearchBar.tsx";
 import styled from "styled-components";
 import Slider, {Settings as SliderSettings} from "react-slick";
-import React, {useContext, useEffect} from "react";
+import React, {useEffect} from "react";
 import {Book} from "../types/types.ts";
-import {FaStar} from "react-icons/fa";
 import Waypoint, {Position} from "@restart/ui/Waypoint";
-import {Link} from "react-router-dom";
 import BookComponent from "../Components/BookComponent.tsx";
 
 const HomeH1 = styled.h1`
@@ -80,7 +78,7 @@ function Home() {
       <h1>Destaques</h1>
       {/* TODO add skeleton https://reactrouter.com/en/main/components/await */}
       <StyledSlider className={"mxxl"} {...sliderSettings}>
-        {books.map((book: Book) => <BookComponent book={book}/>)}
+        {books.map((book: Book) => <BookComponent book={book} key={book.id}/>)}
       </StyledSlider>
     </div>
   </>
