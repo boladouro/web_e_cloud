@@ -20,7 +20,13 @@ import CartPage from './routes/Cart.tsx';
 import {ShouldRevalidateFunctionArgs} from "@remix-run/router/utils.ts";
 import {bookLoader, searchLoader} from "./loaders_contexts.ts";
 import Search from "./routes/Search.tsx";
-import CartContext from "./Components/cartComponet.tsx";
+
+const CartContext = createContext({
+    NBook: 0,
+    Total: 0,
+    Books: [],
+  });
+  export default CartContext;
 
 
 // TODO add dynamic document title
@@ -56,21 +62,18 @@ const router = createBrowserRouter([
       {
         path: "cart/",
         element: <CartPage />,
+        loader: bookLoader,
       }
     ]
   },
 ]);
 
 
-// const [Total, setTotal] = useState(0);
-// const [NBook, setNBook] = useState(0); por algum motivo quando coloco isso o site todo para de funfar asldalsd
-// const [Books, setBooks] = useState([]);
-
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   
   <React.StrictMode>
-     <CartContext.Provider value={0,0,[] /*{Total ,NBook, Books}*/}>
+     <CartContext.Provider value={{Total:0 ,NBook:0, Books:[]}}>
       <RouterProvider router={router}/>
     </CartContext.Provider>
   </React.StrictMode>,
