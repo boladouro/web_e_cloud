@@ -1,7 +1,9 @@
 import {Book} from "../types/types.ts";
 import {Navigate, useLoaderData, useParams} from "react-router-dom";
-import React from "react";
+import React, { useContext, useState } from "react";
 import {PrettyBook} from "../Components/PrettyBook.tsx";
+
+
 
 export default function BookPage() {
   const {bookId, bookTitle} = useParams()

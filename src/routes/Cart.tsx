@@ -1,6 +1,21 @@
-import { useState, createContext } from "react";
+import React, { useContext } from "react";
+import CartContext from "../Components/cartComponet";
 
-export default function ErrorPage() {
-    return <>
-    </>
+export default function CartPage() {
+    const { NBook, Total, Books } = useContext(CartContext);
+
+    return (
+        <>
+            <h1>Shopping Cart</h1>
+            <p>Total Items: {NBook}</p>
+            <p>Total Price: {Total}</p>
+
+            <h2>Items in Cart:</h2>
+            <ul>
+                {Books.map((book, index) => (
+                    <li key={index}>{book.title} - {book.price}</li>
+                ))}
+            </ul>
+        </>
+    );
 }
