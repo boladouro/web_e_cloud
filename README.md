@@ -20,11 +20,11 @@ NOTA: LEMBRAR DE VER OS TODOS
 ### 3. Página individual de cada livro
 
 * [X]  a. Informação completa de cada Livro
-* [ ]  b. Botão para adicionar livro ao carrinho de compra
+* [X]  b. Botão para adicionar livro ao carrinho de compra
 
 ### 4. Página Carrinho
 
-* [ ]  a. Lista de todos os livros adicionados à lista de compra;
+* [X]  a. Lista de todos os livros adicionados à lista de compra;
 * [ ]  b. Utilizador deverá ser capaz de modificar o número de exemplares para cada livro;
 * [ ]  c. Remover livro e/ou remover a lista de compras total;
 
@@ -32,7 +32,7 @@ NOTA: LEMBRAR DE VER OS TODOS
 
 * [ ]  a. Uso de State e Props;
 * [ ]  b. Reutilização de componentes;
-* [ ]  c. UseContext para gerir estado global da aplicação;
+* [x]  c. UseContext para gerir estado global da aplicação;
 * [ ]  d. A estrutura do site deverá ter um Header com logo e menu;
 * [ ]  e. No menu incluir o contador com o número total de itens adicionados ao carrinho;
 * [ ]  f. Footer
