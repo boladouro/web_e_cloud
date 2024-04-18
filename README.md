@@ -30,8 +30,8 @@ NOTA: LEMBRAR DE VER OS TODOS
 
 ### 5. Considerações gerais:
 
-* [ ]  a. Uso de State e Props;
-* [ ]  b. Reutilização de componentes;
+* [x]  a. Uso de State e Props;
+* [x]  b. Reutilização de componentes;
 * [x]  c. UseContext para gerir estado global da aplicação;
 * [ ]  d. A estrutura do site deverá ter um Header com logo e menu;
 * [ ]  e. No menu incluir o contador com o número total de itens adicionados ao carrinho;
