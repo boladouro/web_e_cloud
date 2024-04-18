@@ -2,7 +2,7 @@ import {SearchBar} from "../Components/SearchBar.tsx";
 import styled from "styled-components";
 import Slider, {Settings as SliderSettings} from "react-slick";
 import React, {useEffect} from "react";
-import {Book} from "../types/types.ts";
+import {Book} from "../types.ts";
 import Waypoint, {Position} from "@restart/ui/Waypoint";
 import BookComponent from "../Components/BookComponent.tsx";
 

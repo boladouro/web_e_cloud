@@ -1,6 +1,6 @@
 import React, { useContext, useState, createContext, ReactNode } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { Book } from './types/types.ts';
+import { Book } from './types.ts';
 import ReactDOM from 'react-dom/client';
 import "bulma";
 import 'normalize.css';
@@ -15,7 +15,7 @@ import Root from "./routes/Root.tsx";
 import BookPage from "./routes/BookPage.tsx";
 import CartPage from './routes/Cart.tsx';
 import { ShouldRevalidateFunctionArgs } from "@remix-run/router/utils.ts";
-import { bookLoader, searchLoader } from "./loaders_contexts.ts";
+import { bookLoader, searchLoader } from "./loaders.ts";
 import Search from "./routes/Search.tsx";
 
 const CartContext = createContext({

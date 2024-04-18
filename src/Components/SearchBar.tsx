@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Form, useSearchParams, useSubmit} from "react-router-dom";
 import styled from 'styled-components';
 import {FaFilter, FaSearch} from 'react-icons/fa';
-import {Book, BulmaSize, filters, filtersKeys} from "../types/types.ts"; // Import the Font Awesome icon
+import {Book, BulmaSize, filters, filtersKeys} from "../types.ts"; // Import the Font Awesome icon
 import {toast} from "sonner"
 import {addToFilter, qSeparateColon} from "@/lib/utils.ts";
 import {Dialog, DialogContent, DialogTrigger} from "@/Components/ui/dialog.tsx";

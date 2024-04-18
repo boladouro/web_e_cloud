@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import Slider, { Settings as SliderSettings } from "react-slick";
 import { FaStar } from "react-icons/fa";
 import CartContext from "../entry.tsx";
-import { Book } from "../types/types.ts";
+import { Book } from "../types.ts";
 import CartComponent from "../Components/CartComponent.tsx";
 
 export default function Cart() {

@@ -1,4 +1,4 @@
-import {Book, PaginationLinks} from "../types/types.ts";
+import {Book, PaginationLinks} from "../types.ts";
 import {useLoaderData, useSearchParams} from "react-router-dom";
 import BookComponent from "../Components/BookComponent.tsx";
 import React, {useEffect} from "react";

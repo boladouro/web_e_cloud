@@ -1,4 +1,4 @@
-import {Book} from "../types/types.ts";
+import {Book} from "../types.ts";
 import {Navigate, useLoaderData, useParams} from "react-router-dom";
 import React, { useContext, useState } from "react";
 import {PrettyBook} from "../Components/PrettyBook.tsx";
