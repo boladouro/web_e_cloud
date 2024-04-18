@@ -1,10 +1,10 @@
-import React, {createContext, useContext} from 'react'
-import ReactDOM from 'react-dom/client'
-import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
-
-import "bulma"
+import React, { useContext, useState, createContext, ReactNode } from 'react';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { Book } from './types/types.ts';
+import ReactDOM from 'react-dom/client';
+import "bulma";
 import 'normalize.css';
-import 'virtual:uno.css'
+import 'virtual:uno.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./tailwind.css";
@@ -12,40 +12,68 @@ import "./tailwind.css";
 import Home from "./routes/Home.tsx";
 import ErrorPage from "./routes/ErrorPage.tsx";
 import Root from "./routes/Root.tsx";
-
-
 import BookPage from "./routes/BookPage.tsx";
 import CartPage from './routes/Cart.tsx';
-import {ShouldRevalidateFunctionArgs} from "@remix-run/router/utils.ts";
-import {bookLoader, searchLoader} from "./loaders_contexts.ts";
+import { ShouldRevalidateFunctionArgs } from "@remix-run/router/utils.ts";
+import { bookLoader, searchLoader } from "./loaders_contexts.ts";
 import Search from "./routes/Search.tsx";
 
 const CartContext = createContext({
-    NBook: 0,
-    Total: 0,
-    Books: [],
-  });
-  export default CartContext;
+  NBook: 0,
+  Total: 0,
+  Books: [],
+  addCart: (book: Book) => {}, 
+  remoCart: (bookId: string) => {}, 
+  clearCart: () => {},
+});
 
+export default CartContext;
 
-// TODO add dynamic document title
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const [Books, setBooks] = useState<Book[]>([]);
+  const [NBook, setNBook] = useState<number>(0);
+  const [Total, setTotal] = useState<number>(0);
+
+  const addCart = (book: Book) => {
+    setBooks([...Books, book]);
+    setNBook(NBook + 1);
+  };
+
+  const remoCart = (bookId: string) => {
+    const updatedBooks = Books.filter((book) => book.id !== bookId);
+    setBooks(updatedBooks);
+    setNBook(NBook - 1);
+  };
+
+  const clearCart = () => {
+    setBooks([]);
+    setNBook(0);
+  };
+
+  return (
+    <CartContext.Provider value={{ Total, NBook, Books, addCart, remoCart, clearCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root/>,
-    errorElement: <ErrorPage/>,
+    element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
-        element: <Navigate to={"/home"} replace/>
+        element: <Navigate to={"/home"} replace />
       },
       {
         path: "home",
-        element: <Home/>
+        element: <Home />
       },
       {
         path: "book/:bookId/:bookTitle?",
-        element: <BookPage/>,
+        element: <BookPage />,
         loader: bookLoader,
         shouldRevalidate: (args: ShouldRevalidateFunctionArgs) => {
           console.log("args", args)
@@ -56,23 +84,19 @@ const router = createBrowserRouter([
         path: "search/",
         element: <Search />,
         loader: searchLoader,
-      }
-      ,
+      },
       {
         path: "cart/",
         element: <CartPage />,
-        loader: bookLoader,
       }
     ]
   },
 ]);
 
-
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <CartContext.Provider value={{Total:0 ,NBook:0, Books:[]}}>
-      <RouterProvider router={router}/>
-    </CartContext.Provider>
+    <CartProvider>
+      <RouterProvider router={router} />
+    </CartProvider>
   </React.StrictMode>,
 );
