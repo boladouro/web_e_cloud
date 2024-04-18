@@ -11,6 +11,6 @@ export default function BookPage() {
   if (!bookTitle) {
     return <Navigate to={`/book/${bookId}/${book.title.replaceAll(" ", "-")}`} replace/>
   }
-  console.log("book", book)
+  // console.log("book", book)
   return <PrettyBook props={book}/>
 }

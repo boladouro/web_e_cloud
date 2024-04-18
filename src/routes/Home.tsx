@@ -26,7 +26,7 @@ function Home() {
   useEffect(() => {
     const prom = fetchBooksByPopularity();
     prom.then((books: Book[]) => {
-      console.log("books", books)
+      // console.log("books", books)
       setBooks(books)
     })
   }, []);

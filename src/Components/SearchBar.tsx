@@ -21,7 +21,6 @@ export function SearchBar({size = "medium", className = "", autofocus}:{size: Bu
       return response.json() as Promise<Book[]>
     }).then((books) => {
       books.map(book => book.categories).flat()
-      const categories = Array.from(new Set(books.map(book => book.categories).flat()))
       return Array.from(new Set(books.map(book => book.categories).flat())).sort()
     }).then(setCategories)
   }, [])
@@ -56,7 +55,7 @@ export function SearchBar({size = "medium", className = "", autofocus}:{size: Bu
     margin: 1em;
     padding: 2em;
   `;
-  console.log(categories)
+  // console.log(categories)
   const handleInputBlur = (filterType: filtersKeys, filterValue: string, toastMessage: string) => {
     const val = filterValue;
     if (val === "" || qSeparateColon(q)[1][filterType] === val) {
@@ -80,7 +79,7 @@ export function SearchBar({size = "medium", className = "", autofocus}:{size: Bu
               <label className={"label"}>Escolha categorias para filtrar sobre:</label>
               <div className={"select w-full"}>
                 <select className={"w-full"} name={"categories"} defaultValue={""} onChangeCapture={(event) => {
-                  setQ(addToFilter(q, "category", event.target.value.replace(" ", "+")))
+                  setQ(addToFilter(q, "category", event.currentTarget.value.replace(" ", "+")))
                   toast("Category added to search")
                 }}>
                   <option value={""} disabled>Categorias</option>
@@ -114,7 +113,7 @@ export function SearchBar({size = "medium", className = "", autofocus}:{size: Bu
               <label className={"label"}>Ordenar por:</label>
               <div className={"select"}>
                 <select className={"w-full"} name={"sort"} defaultValue={""} onChangeCapture={(event) => {
-                  setQ(addToFilter(q, "sort", event.target.value.replace(" ", "+")))
+                  setQ(addToFilter(q, "sort", event.currentTarget.value.replace(" ", "+")))
                   toast("Sort added to search")
                 }}>
                   <option value={""} disabled>Ordenar por</option>

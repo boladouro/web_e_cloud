@@ -26,3 +26,10 @@ export interface filters {
 }
 
 export type filtersKeys = keyof filters
+
+export interface PaginationLinks {
+  first: [number, string]
+  prev?: [number, string] // if it's the first page, there's no prev
+  next?: [number, string]
+  last: [number, string]
+}

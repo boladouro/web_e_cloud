@@ -30,7 +30,7 @@ function Header({spacing= "h10vh"}) {
       <div className={"navbar-menu"} id={"header-menu"}>
         <div className={"navbar-start"}>
           <div className={"navbar-item has-dropdown is-hoverable"}>
-            <a className={"navbar-link"}>Discover</a>
+            <a className={"navbar-link"}>Discover</a> {/*TODO add links*/}
             <div className={"navbar-dropdown"}>
               <a className={"navbar-item"}>New</a>
               <a className={"navbar-item"}>Top Rated</a>
