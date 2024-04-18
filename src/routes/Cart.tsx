@@ -1,5 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import CartContext from "../Components/cartComponet";
+
+
+const { NBook, Total, Books } = useContext(CartContext);
 
 export default function CartPage() {
     const { NBook, Total, Books } = useContext(CartContext);
@@ -11,11 +14,11 @@ export default function CartPage() {
             <p>Total Price: {Total}</p>
 
             <h2>Items in Cart:</h2>
-            <ul>
+            {/* <ul>
                 {Books.map((book, index) => (
-                    <li key={index}>{book.title} - {book.price}</li>
+                    <li key={index}>{book}</li>
                 ))}
-            </ul>
+            </ul>  */}
         </>
     );
 }

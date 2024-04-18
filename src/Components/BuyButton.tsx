@@ -1,9 +1,12 @@
 import React, { useContext } from "react";
+import {Book} from "../types/types.ts";
 import styled from 'styled-components';
 import { FaCartPlus } from 'react-icons/fa';
-import { BulmaSize } from "../types/types.ts"; 
+import { BulmaSize } from "../types/types.ts";
+import CartContext from "../Components/cartComponet"; 
 
-export function Buybutton({ size = "medium", }: { size: BulmaSize, className?: string }) {
+
+export function Buybutton({ size = "medium", book, }: { size: BulmaSize, book:Book, className?: string }) {
 
 
   const BuyIcon = styled(FaCartPlus)`
