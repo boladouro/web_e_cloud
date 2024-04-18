@@ -20,6 +20,7 @@ export const bookLoader: LoaderFunction<Book> = async ({params}: loaderParams): 
 }
 
 export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderParams): Promise<Book[]> => {
+  // TODO this
   const urlParams = new URL(request.url).searchParams
   const q = urlParams.get("q")
   if (!q) {
