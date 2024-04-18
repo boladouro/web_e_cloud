@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Form, useSearchParams} from "react-router-dom";
+import React, {useEffect, useRef, useState} from "react";
+import {Form, useSearchParams, useSubmit} from "react-router-dom";
 import styled from 'styled-components';
 import {FaFilter, FaSearch} from 'react-icons/fa';
 import {Book, BulmaSize, filters, filtersKeys} from "../types/types.ts"; // Import the Font Awesome icon
@@ -8,11 +8,19 @@ import {addToFilter, qSeparateColon} from "@/lib/utils.ts";
 import {Dialog, DialogContent, DialogTrigger} from "@/Components/ui/dialog.tsx";
 
 
-export function SearchBar({size = "medium", className = "", autofocus}:{size: BulmaSize, className?: string, autofocus?: boolean}) {
+export function SearchBar({size = "medium", className = "", autofocus}: {
+  size: BulmaSize,
+  className?: string,
+  autofocus?: boolean
+}) {
+  const submit = useSubmit();
+  let formRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [q, setQ] = useState(searchParams.get("q") ?? "");
   const [qNoFilters, filters] = qSeparateColon(q);
   const [categories, setCategories] = useState<string[]>([]);
+  const [openDialog, setOpenDialog] = React.useState(false)
+
   useEffect(() => {
     const response = fetch(`http://localhost:3030/books`).then((response) => {
       if (!response.ok) {
@@ -65,14 +73,15 @@ export function SearchBar({size = "medium", className = "", autofocus}:{size: Bu
     toast(toastMessage);
   };
   return (
-    <Form method={"get"} action={"/search"} className="field has-addons important:mb0">
+    <Form method={"get"} action={"/search"} className="field has-addons important:mb0" ref={formRef}>
       <div className="control">
-        <input autoFocus={autofocus ?? false} className={`input is-${size} ${className}`} name={"q"} type="text" placeholder="Título, Autor, ou tema" value={q} onChange={(event) => {
+        <input autoFocus={autofocus ?? false} className={`input is-${size} ${className}`} name={"q"} type="text"
+               placeholder="Título, Autor, ou tema" value={q} onChange={(event) => {
           const val = event.target.value
           setQ(val)
 
         }}/>
-        <Dialog>
+        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
           <DialogTrigger><FilterIcon/></DialogTrigger>
           <DialogContent>
             <div className={"control"}>
@@ -89,41 +98,53 @@ export function SearchBar({size = "medium", className = "", autofocus}:{size: Bu
             </div>
             <div className={"control"}>
               <label className={"label"}>Pesquise por um(a) autor(a)</label>
-              <input className={"input "} type={"text"} name={"autor"} placeholder={"Autor"} onBlur={(event) => handleInputBlur("author", event.target.value, "Author added to search")} onKeyDown={(
-                event) => {
-                if (event.key === "Enter") {
-                  handleInputBlur("author", event.currentTarget.value, "Author added to search")
-                }
-              }
-              }/>
+              <input className={"input "} type={"text"} name={"autor"} placeholder={"Autor"}
+                     onBlur={(event) => handleInputBlur("author", event.target.value, "Author added to search")}
+                     onKeyDown={(
+                       event) => {
+                       if (event.key === "Enter") {
+                         handleInputBlur("author", event.currentTarget.value, "Author added to search")
+                       }
+                     }
+                     }/>
             </div>
             <div className={"control"}>
               <label className={"label"}>Pesquise por um título</label>
-              <input className={"input "} type={"text"} name={"title"} placeholder={"Título"} onBlur={(event) => handleInputBlur("title", event.target.value, "Title added to search")} onKeyDown={
-                (event) => {
-                  if (event.key === "Enter") {
-                    handleInputBlur("title", event.currentTarget.value, "Title added to search")
-                  }
-                }
-              }/>
+              <input className={"input "} type={"text"} name={"title"} placeholder={"Título"}
+                     onBlur={(event) => handleInputBlur("title", event.target.value, "Title added to search")}
+                     onKeyDown={
+                       (event) => {
+                         if (event.key === "Enter") {
+                           handleInputBlur("title", event.currentTarget.value, "Title added to search")
+                         }
+                       }
+                     }/>
               {/* TODO FALTA PRECOS E DATAS */}
             </div>
-            <div className={"control"}>
-              {/* Sort */}
-              <label className={"label"}>Ordenar por:</label>
-              <div className={"select"}>
-                <select className={"w-full"} name={"sort"} defaultValue={""} onChangeCapture={(event) => {
-                  setQ(addToFilter(q, "sort", event.currentTarget.value.replace(" ", "+")))
-                  toast("Sort added to search")
-                }}>
-                  <option value={""} disabled>Ordenar por</option>
-                  <option value={"score"}>Melhor pontuação</option>
-                  <option value={"-score"}>Pior pontuação</option>
-                  <option value={"price"}>Preço mais baixo</option>
-                  <option value={"-price"}>Preço mais alto</option>
-                  <option value={"publishedDate"}>Mais Recente</option>
-                  <option value={"-publishedDate"}>Mais Velho</option>
-                </select>
+            <div className={"field is-horizontal flex-justify-between before:content-none after:content-none"}>
+              <div className={"control"}>
+                {/* Sort */}
+                <label className={"label"}>Ordenar por:</label>
+                <div className={"select"}>
+                  <select className={"w-full"} name={"sort"} defaultValue={""} onChangeCapture={(event) => {
+                    setQ(addToFilter(q, "sort", event.currentTarget.value.replace(" ", "+")))
+                    toast("Sort added to search")
+                  }}>
+                    <option value={""} disabled>Ordenar por</option>
+                    <option value={"score"}>Melhor pontuação</option>
+                    <option value={"-score"}>Pior pontuação</option>
+                    <option value={"price"}>Preço mais baixo</option>
+                    <option value={"-price"}>Preço mais alto</option>
+                    <option value={"publishedDate"}>Mais Recente</option>
+                    <option value={"-publishedDate"}>Mais Velho</option>
+                  </select>
+                </div>
+              </div>
+              <div className={"control"}>
+                <label className={"label"}>&#x200b;</label> {/* To make the same space*/}
+                <button className={"button is-primary"} type={"submit"}
+                        onClick={() => {submit(formRef.current); setOpenDialog(false)} }>Search
+                </button>
               </div>
             </div>
           </DialogContent>

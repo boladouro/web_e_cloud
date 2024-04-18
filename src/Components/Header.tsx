@@ -30,10 +30,10 @@ function Header({spacing= "h10vh"}) {
       <div className={"navbar-menu"} id={"header-menu"}>
         <div className={"navbar-start"}>
           <div className={"navbar-item has-dropdown is-hoverable"}>
-            <a className={"navbar-link"}>Discover</a> {/*TODO add links*/}
+            <Link to={"/search?q="} className={"navbar-link"}>Discover</Link> {/*TODO add links*/}
             <div className={"navbar-dropdown"}>
-              <a className={"navbar-item"}>New</a>
-              <a className={"navbar-item"}>Top Rated</a>
+              <Link to={"/search?q=sort:publishedDate"} className={"navbar-item"}>New</Link>
+              <Link to={"/search?q=sort:score"} className={"navbar-item"}>Top Rated</Link>
             </div>
           </div>
           <a id={"header-search-bar"} className={
