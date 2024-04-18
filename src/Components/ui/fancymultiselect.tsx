@@ -1,3 +1,5 @@
+// https://craft.mxkaske.dev/post/fancy-multi-select
+
 import * as React from "react";
 import { X } from "lucide-react";
 
