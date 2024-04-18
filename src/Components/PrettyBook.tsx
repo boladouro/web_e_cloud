@@ -51,7 +51,7 @@ export function PrettyBook({props}: { props: Book }) {
                   <h1>Categories</h1>
                   <p>{props.categories}</p>
                   <br />
-                  <Buybutton className={"w-187"} size={"large"} />
+                  <Buybutton className={"w-187"} size={"large"} book={props} />
                 </li>
                 <li></li>
                 <li></li>
@@ -89,7 +89,7 @@ export function PrettyBook({props}: { props: Book }) {
                   <p>{props.categories}</p>
                 </li>
                   <br />
-                  <Buybutton className={"w-187"} size={"large"} />
+                  <Buybutton className={"w-187"} size={"large"} book={props} />
                 <li></li>
         </div>
     </div>

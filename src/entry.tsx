@@ -62,12 +62,15 @@ const router = createBrowserRouter([
 ]);
 
 
+// const [Total, setTotal] = useState(0);
+// const [NBook, setNBook] = useState(0); por algum motivo quando coloco isso o site todo para de funfar asldalsd
+// const [Books, setBooks] = useState([]);
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   
   <React.StrictMode>
-    <CartContext.Provider value={0,0,[]}>
+     <CartContext.Provider value={0,0,[] /*{Total ,NBook, Books}*/}>
       <RouterProvider router={router}/>
     </CartContext.Provider>
   </React.StrictMode>,
