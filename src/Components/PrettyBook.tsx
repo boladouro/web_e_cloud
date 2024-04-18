@@ -3,8 +3,6 @@ import {Book} from "../types/types.ts";
 
 
 
-
-
 export function PrettyBook({props}: { props: Book }) {
   return (
     <>

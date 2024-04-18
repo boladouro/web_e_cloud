@@ -14,7 +14,6 @@ const HomeH1 = styled.h1`
 `;
 
 function Home() {
-  console.log("Home component rendered");
   const numberOfBooksForSlider = 8
   const fetchBooksByPopularity: () => Promise<Book[]> = async () => {
     const response = await fetch(`http://localhost:3030/books?_limit=${numberOfBooksForSlider}&_sort=score,publishedDate.$date&_order=desc,desc`) // if this was long time data a filter could also be applied for only recent
