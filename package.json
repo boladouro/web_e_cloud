@@ -24,6 +24,7 @@
     "cmdk": "0.2.1",
     "json-server": "github:notPlancha/json-server#v0",
     "lucide-react": "^0.370.0",
+    "next-themes": "^0.3.0",
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "oxlint": "^0.2.17",
@@ -35,6 +36,7 @@
     "react-slick": "^0.30.2",
     "shadcn-ui": "^0.8.0",
     "slick-carousel": "^1.8.1",
+    "sonner": "^1.4.41",
     "styled-components": "^6.1.8",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7"

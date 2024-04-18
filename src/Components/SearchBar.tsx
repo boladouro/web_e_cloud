@@ -1,22 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {Form, useParams, useSearchParams} from "react-router-dom";
+import {Form, useSearchParams} from "react-router-dom";
 import styled from 'styled-components';
-import {FaFilter, FaSearch, FaSortDown, FaSortUp} from 'react-icons/fa';
+import {FaFilter, FaSearch} from 'react-icons/fa';
 import {Book, BulmaSize} from "../types/types.ts"; // Import the Font Awesome icon
+import {toast} from "sonner"
+import {addToFilter, qSeparateColon} from "@/lib/utils.ts";
+import {Dialog, DialogContent, DialogTrigger} from "@/Components/ui/dialog.tsx";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/Components/ui/popover"
-import {Button} from "@/Components/ui/button.tsx";
-import {qSeparateColon} from "@/lib/utils.ts";
-import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/Components/ui/command.tsx";
-import {FancyMultiSelect} from "@/Components/ui/fancymultiselect.tsx";
 
-export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, className?: string}) {
+export function SearchBar({size = "medium", className = "", autofocus}:{size: BulmaSize, className?: string, autofocus?: boolean}) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const q = searchParams.get("q") ?? "";
+  const [q, setQ] = useState(searchParams.get("q") ?? "");
   const [qNoFilters, filters] = qSeparateColon(q);
   const [categories, setCategories] = useState<string[]>([]);
   useEffect(() => {
@@ -31,6 +25,9 @@ export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, cl
       return Array.from(new Set(books.map(book => book.categories).flat())).sort()
     }).then(setCategories)
   }, [])
+  useEffect(() => {
+    setQ(searchParams.get("q") ?? "")
+  }, [searchParams]);
   const SearchIcon = styled(FaSearch)`
     position: absolute;
     top: 32%;
@@ -62,8 +59,51 @@ export function SearchBar({size = "medium", className = ""}:{size: BulmaSize, cl
   return (
     <Form method={"get"} action={"/search"} className="field has-addons important:mb0">
       <div className="control">
-        <input className={`input is-${size} ${className}`} name={"q"} type="text" placeholder="Título, Autor, ou tema"
-               defaultValue={searchParams.get("q") ?? ""}/>
+        <input autoFocus={autofocus ?? false} className={`input is-${size} ${className}`} name={"q"} type="text" placeholder="Título, Autor, ou tema" value={q} onChange={(event) => {
+          const val = event.target.value
+          setQ(val)
+
+        }}/>
+        <Dialog>
+          <DialogTrigger><FilterIcon/></DialogTrigger>
+          <DialogContent>
+            <div className={"control"}>
+              <label className={"label"}>Escolha categorias para filtrar sobre:</label>
+              <div className={"select w-full"}>
+                <select className={"w-full"} name={"categories"} defaultValue={""} onChangeCapture={(event) => {
+                  setQ(addToFilter(q, "category", event.target.value.replace(" ", "+")))
+                  toast("Category added to search")
+                }}>
+                  <option value={""} disabled>Categorias</option>
+                  {categories.map(category => <option key={category}>{category}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className={"control"}>
+              <label className={"label"}>Pesquise por um(a) autor(a)</label>
+              <input className={"input "} type={"text"} name={"autor"} placeholder={"Autor"} onBlur={(event) => {
+                const val = event.target.value
+                if (val === "") {
+                  return
+                }
+                setQ(addToFilter(q, "author", event.target.value.replace(" ", "+")))
+                toast("Author added to search")
+              }}/>
+            </div>
+            <div className={"control"}>
+              <label className={"label"}>Pesquise por um título</label>
+              <input className={"input "} type={"text"} name={"title"} placeholder={"Título"} onBlur={(event) => {
+                const val = event.target.value
+                if (val === "") {
+                  return
+                }
+                setQ(addToFilter(q, "title", event.target.value.replace(" ", "+")))
+                toast("Title added to search")
+              }}/>
+              {/* TODO FALTA PRECOS E DATAS */}
+            </div>
+          </DialogContent>
+        </Dialog>
         <button role={"button"}><SearchIcon/></button>
       </div>
     </Form>

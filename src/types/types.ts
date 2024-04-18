@@ -17,12 +17,12 @@ export interface Book {
 export type BulmaSize = "small" | "normal" | "medium" | "large"
 
 export interface filters {
-  category?: string[]
+  category?: Set<string>
   price?: [number, number]
   publishedDate?: [Date?, Date?]
-  authors?: string[]
-  authorsExact?: boolean
+  author?: string
   title?: string
+  sort?: "score" | "publishedDate" | "price" | "-score" | "-publishedDate" | "-price"
 }
 
 export type filtersKeys = keyof filters
