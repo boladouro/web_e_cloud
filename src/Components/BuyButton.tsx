@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import {Book} from "../types.ts";
 import styled from 'styled-components';
-import { FaCartPlus } from 'react-icons/fa';
+import { FaCartPlus,FaShoppingBasket  } from 'react-icons/fa';
 import { BulmaSize } from "../types.ts";
 import CartContext from "../entry.tsx"; 
 import {Link} from "react-router-dom";

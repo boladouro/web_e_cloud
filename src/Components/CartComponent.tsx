@@ -1,7 +1,7 @@
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import React, { useContext } from "react";
-import { Book } from "../types/types.ts";
+import { Book } from "../types.ts";
 import CartContext from "@/entry.tsx";
 
 export default function CartComponent({ book, count }: { book: Book, count: number }) {
