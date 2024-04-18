@@ -11,7 +11,7 @@ NOTA: LEMBRAR DE VER OS TODOS
 
 ### 2. Página Livros
 
-* [ ]  a. Lista em forma de grelha com todos os livros;
+* [X]  a. Lista em forma de grelha com todos os livros;
 * [ ]  b. Paginação: apresentar 10 livros por página e botões para saltar de página;
 * [ ]  c. Ordenar: utilizador deverá ser capaz de ordenar os livros por preço ou pontuação;
 * [ ]  d. Filtros: utilizador deverá ser capaz de fazer a filtragem de livros por autor ou categoria;
