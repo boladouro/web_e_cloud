@@ -2,7 +2,7 @@ import {Book, PaginationLinks} from "../types/types.ts";
 import {useLoaderData, useSearchParams} from "react-router-dom";
 import {PrettyBook} from "../Components/PrettyBook.tsx";
 import BookComponent from "../Components/BookComponent.tsx";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 
 import {
@@ -19,13 +19,18 @@ import {
 // search bar is in header
 export default function Search() {
   const [books, paginationLinks] = useLoaderData() as [Book[], PaginationLinks?];
+  const [renderPagination, setRenderPagination] = React.useState<boolean>(false)
+  useEffect(() => {
+    if (paginationLinks) {
+      setRenderPagination(true)
+    } else {
+      setRenderPagination(false)
+    }
+  }, [paginationLinks]);
   // get params
   let [searchParams, setSearchParams] = useSearchParams();
   console.log(searchParams)
   console.log(paginationLinks)
-  // useEffect(() => {
-  //   document.title = "Search results"
-  // }, [])
   const currPage = parseInt(searchParams.get("page") ?? "1")
   return <>
     <div className={"grid is-col-min-10 before:content-none after:content-none m3"}>

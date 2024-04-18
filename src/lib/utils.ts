@@ -30,6 +30,9 @@ export function qSeparateColon(q: string): [string, filters] {
       case "title":
         filters.title = value
         break
+      case "sort":
+        filters.sort = value as filters["sort"]
+        break
       default:
         toAdd.push(word)
     }

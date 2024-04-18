@@ -1,6 +1,7 @@
 import {LoaderFunction, Params, redirect} from "react-router-dom";
 import {Book, PaginationLinks} from "./types/types.ts";
 import React from "react";
+import {qSeparateColon} from "@/lib/utils.ts";
 
 interface loaderParams {
   request: Request,
@@ -22,24 +23,37 @@ export const bookLoader: LoaderFunction<Book> = async ({params}: loaderParams): 
 export type paginationHeaderResult = `<${string}>; rel="${string}"`
 
 export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderParams): Promise<[Book[], PaginationLinks?]> => {
-  // TODO this
+  // headers.link:
   // <http://localhost:3030/books?q=&_page=1&_limit=10>; rel="first", <http://localhost:3030/books?q=&_page=1&_limit=10>; rel="prev", <http://localhost:3030/books?q=&_page=3&_limit=10>; rel="next", <http://localhost:3030/books?q=&_page=4&_limit=10>; rel="last"
+
   const urlParams = new URL(request.url).searchParams
   const q = urlParams.get("q") ?? ""
-  const sort = urlParams.get("sort") ?? "score,publishedDate.$date" // no score available in api
-  let order = urlParams.get("order") ?? "desc"
-  // check if order has the same length as sort, and fill the missing values with desc
-  if (order && order.length != sort.split(",").length) {
-    order = order.split(",").concat(Array(sort.split(",").length - order.split(",").length).fill("desc")).join(",")
+  const [qNoFilters, filters] = qSeparateColon(q)
+  let order: "asc" | "desc";
+  // const sort = urlParams.get("sort") ?? "score,publishedDate.$date" // no score available in api
+  if (filters.sort?.startsWith("-")) {
+    // @ts-expect-error
+    filters.sort = filters.sort.slice(1)
+    order = "desc"
+  } else {
+    order = "asc"
   }
   const page = urlParams.get("page") ?? "1"
-  const params = ["title", "isbn", "publishedDate.$date", "shortDescription", "longDescription", "authors", "categories"]
+  const attrs = ["title", "isbn", "publishedDate.$date", "shortDescription", "longDescription", "authors", "categories"]
   const response = await fetch(
     `http://localhost:3030/books?` +
-    `q=${q}` +
-    `&attr=${params.join(",")}` +
-    `&_sort=${sort}` +
+    `q=${qNoFilters}` +
+    `&attr=${attrs.join(",")}` +
+    `&_sort=${filters.sort ?? "publishedDate" }` +
     `&_order=${order}` +
+    `&title_like=${filters.title?.replace("+", " ") ?? ""}` +
+    `&authors_like=${filters.author?.replace("+", " ") ?? ""}` +
+    `&price_gte=${filters.price?.[0] ?? "0"}` +
+    `&price_lte=${filters.price?.[1] ?? "1000000"}` +
+    `&publishedDate.$date_gte=${filters.publishedDate?.[0] ?? "19000101"}` +
+    `&publishedDate.$date_lte=${filters.publishedDate?.[1] ?? "30000101"}` +
+    // categories is an OR array
+    (filters.category ? `&categories_like=(?:${[...filters.category!].map(val => val.replace("+", " ")).join("|")})`: "") +
     `&_page=${page}` +
     `&_limit=10`
   ) // dont care abt sql injection
