@@ -48,6 +48,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = () => {
     setBooks([]);
     setNBook(0);
+    setTotal(0);
   };
 
   return (

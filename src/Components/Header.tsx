@@ -1,8 +1,12 @@
 // https://react-restart.github.io/ui/
 
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {SearchBar} from "./SearchBar.tsx";
 import {Link, useLocation} from "react-router-dom";
+import CartContext from "../entry.tsx";
+import { FaShoppingBasket } from 'react-icons/fa';
+import { styled } from "styled-components";
+import { BulmaSize } from "@/types/types.ts";
 
 
 
@@ -19,6 +23,21 @@ function Header({spacing= "h10vh"}) {
       setSearchBarVisible(true)
     }
   }, [location.pathname])
+
+
+  const BasketshoIcon = styled(FaShoppingBasket)`
+    position: flex;
+    top: 32%;
+    right: 2.5em;
+    z-index: 4;
+    color: var(--bulma-input-placeholder-color);
+    font-size: large;
+  `;
+
+
+  const { Total, NBook, Books } = useContext(CartContext);
+
+
 
   return (
     <nav className={`navbar is-fixed-top ${spacing} max-h-60px`} role={"navigation"}>
@@ -41,7 +60,10 @@ function Header({spacing= "h10vh"}) {
           }><SearchBar className={"w100"} size={"normal"}/></a>
         </div>
         <div className={"navbar-end"}>
-          {/*TODO shopping cart*/}
+          <span className="navbar-item">{NBook}</span>
+          <Link to={"/cart"} className={"navbar-item important:hover:bg-transparent"}>
+            <BasketshoIcon />
+          </Link>
         </div>
       </div>
     </nav>
