@@ -11,7 +11,7 @@ export default function Cart() {
   const sliderSettings: SliderSettings = {
     centerMode: true,
     infinite: false,
-    slidesToShow: 3,
+    slidesToShow: 1,
     variableWidth: true,
     speed: 300,
     adaptiveHeight: false,
@@ -38,20 +38,39 @@ export default function Cart() {
   const uniqueBookIds = new Set<string>();
 
   const bookCount: { [id: string]: number } = {};
+  let priceTotal: number = 0;
 
   Books.forEach((book) => {
-    if (bookCount[book.id]) {
-      bookCount[book.id]++;
-    } else {
-      bookCount[book.id] = 1;
-    }
-  });
+      if (bookCount[book.id]) {
+        bookCount[book.id]++;
+      } else {
+        bookCount[book.id] = 1;
+      }
+
+      priceTotal += book.price ?? 0;
+    });
+
+  if (Books.length === 0) {
+    return (
+      <div className={"content has-text-centered"}>
+        <br /><br /><br />
+        <h2>O seu carrinho está vazio!</h2>
+        <p>Adicione alguns livros incríveis ao seu carrinho.</p>
+        <Link to="/home" className="button">Ir para a página principal</Link>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className={"p-t1vh p-l4 p-r4"}>
-        <h1>Cart</h1>
+        <h1>Carrinho</h1>
+        <div className="cart-info">
+          <p>Total de livros: {NBook}</p>
+          <p>Preço total: €{priceTotal.toFixed(2)}</p>
+        </div>
         <StyledSlider className={"mxxl"} {...sliderSettings}>
+
           {Books.map((book: Book) => {
             if (!uniqueBookIds.has(book.id)) {
               uniqueBookIds.add(book.id);

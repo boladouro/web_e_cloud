@@ -131,10 +131,7 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
               <div className={"control"}>
                 <label className={"label"}>&#x200b;</label> {/* To make the same space*/}
                 <button className={"button is-primary"} type={"submit"}
-                        onClick={() => {
-                          submit(formRef.current);
-                          setOpenDialog(false)
-                        }}>Search
+                        onClick={() => {submit(formRef.current); setOpenDialog(false)} }>Pesquisar
                 </button>
               </div>
             </div>

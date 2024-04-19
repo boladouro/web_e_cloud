@@ -713,6 +713,7 @@ figcaption p {
 
 
 .text-container {
-    max-height: 100px; 
+    max-height: 18%; 
     overflow-y: auto; 
 }
+

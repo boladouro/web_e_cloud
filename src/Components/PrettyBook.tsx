@@ -6,7 +6,7 @@ export function PrettyBook({props}: { props: Book }) {
   return (
     <>
       <div className="flex ">
-        <div className="component min-w-60%">
+        <div className="component min-w-100%">
           <ul className="align right">
             <li>
               <figure className='book'>
@@ -17,7 +17,7 @@ export function PrettyBook({props}: { props: Book }) {
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover"
                     }}>
-                      <p className="yellow">€{props.price}</p>
+                      <p className="yellow" style={{ position: 'absolute', bottom: 0, 'paddingRight':'40%', 'paddingLeft' : '40%' }}>€{props.price}</p>
                     </div>
                   </li>
                   <li></li>
@@ -25,13 +25,13 @@ export function PrettyBook({props}: { props: Book }) {
                 <ul className='page'>
                   <li></li>
                   <li>
-                    <h1 className="blue">{props.title}</h1>
-                    <h1>Descrition</h1>
-                    <p className="text-container">{props.shortDescription}</p>
-                    <h1>Authors</h1>
-                    <p>{props.authors}</p>
-                    <h1>Categories</h1>
-                    <p>{props.categories}</p>
+                    <h1 className="blue" style={{ fontSize: "26px" }}>{props.title}</h1>
+                    <h1>Descrição</h1>
+                    <p className="text-container" style={{ color: '#33a1a4'}}>{props.shortDescription}</p>
+                    <h1>Autores</h1>
+                    <p style={{ color: '#33a1a4'}}>{props.authors}</p>
+                    <h1>Categorias</h1>
+                    <p style={{ color: '#33a1a4'}}>{props.categories}</p>
                     <br/>
                     <Buybutton className={"w-187"} size={"large"} book={props}/>
                   </li>
@@ -53,10 +53,10 @@ export function PrettyBook({props}: { props: Book }) {
           </ul>
         </div>
 
-        <div className="min-w-50%">
+        {/* <div className="min-w-50% " style={{ listStyleType: 'none' }}>
           <li></li>
           <li>
-            <h1 className="blue">{props.title}</h1>
+            <h1>{props.title}</h1>
           </li>
           <li>
             <h1>Descrition</h1>
@@ -73,6 +73,9 @@ export function PrettyBook({props}: { props: Book }) {
           <br/>
           <Buybutton className={"w-187"} size={"large"} book={props}/>
           <li></li>
+        </div> */}
+        <div>
+
         </div>
       </div>
     </>
