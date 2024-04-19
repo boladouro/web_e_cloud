@@ -35,7 +35,7 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
   useEffect(() => {
     setQ(searchParams.get("q") ?? "")
   }, [searchParams]);
-  // TODO icons overlap with text because of transparent background, but with current method they don't fill enough
+  // icons overlap with text because of transparent background, but with current method they don't fill enough
   // so an input too high will make them almost invisible
   const SearchIcon = styled(FaSearch)`
     position: absolute;
@@ -53,17 +53,6 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
     color: var(--bulma-input-placeholder-color);
     font-size: var(--bulma-size-${size});
   `;
-  const FilterPopover = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: start;
-    z-index: 5;
-    background-color: rgb(37, 68, 86);
-    margin: 1em;
-    padding: 2em;
-  `;
-  // console.log(categories)
   const handleInputBlur = (filterType: filtersKeys, filterValue: string, toastMessage: string) => {
     const val = filterValue;
     if (val === "" || qSeparateColon(q)[1][filterType] === val) {
@@ -119,7 +108,6 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
                          }
                        }
                      }/>
-              {/* TODO FALTA PRECOS E DATAS */}
             </div>
             <div className={"field is-horizontal flex-justify-between before:content-none after:content-none"}>
               <div className={"control"}>
@@ -143,7 +131,10 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
               <div className={"control"}>
                 <label className={"label"}>&#x200b;</label> {/* To make the same space*/}
                 <button className={"button is-primary"} type={"submit"}
-                        onClick={() => {submit(formRef.current); setOpenDialog(false)} }>Search
+                        onClick={() => {
+                          submit(formRef.current);
+                          setOpenDialog(false)
+                        }}>Search
                 </button>
               </div>
             </div>

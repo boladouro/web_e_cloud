@@ -6,7 +6,7 @@ export function Footer() {
     <footer className={"footer"}>
       <div className="content has-text-centered">
         <p>
-          &copy; 2024 não_sei. Todos os direitos reservados.
+          &copy; 2024 notPlancha & kardec
         </p>
       </div>
     </footer>

@@ -31,6 +31,7 @@ export default function Search() {
   const currPage = parseInt(searchParams.get("page") ?? "1")
   return <>
     <div className={"grid is-col-min-10 before:content-none after:content-none m3"}>
+      {books.length == 0 && <h1 className={"text-2xl"}>No books match your search</h1>}
       {books.map(book => <div className={"cell max-w-20em"} key={book.id}><BookComponent book={book}/></div>)}
     </div>
     {paginationLinks && <Pagination>

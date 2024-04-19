@@ -47,10 +47,10 @@ export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderPara
     `&_order=${order}` +
     `&title_like=${filters.title?.replace("+", " ") ?? ""}` +
     `&authors_like=${filters.author?.replace("+", " ") ?? ""}` +
-    `&price_gte=${filters.price?.[0] ?? "0"}` +
-    `&price_lte=${filters.price?.[1] ?? "1000000"}` +
-    `&publishedDate.$date_gte=${filters.publishedDate?.[0] ?? "19000101"}` +
-    `&publishedDate.$date_lte=${filters.publishedDate?.[1] ?? "30000101"}` +
+    // `&price_gte=${filters.price?.[0] ?? "0"}` +
+    // `&price_lte=${filters.price?.[1] ?? "1000000"}` +
+    // `&publishedDate.$date_gte=${filters.publishedDate?.[0] ?? "19000101"}` +
+    // `&publishedDate.$date_lte=${filters.publishedDate?.[1] ?? "30000101"}` +
     // categories is an OR array
     (filters.category ? `&categories_like=(?:${[...filters.category!].map(val => val.replace("+", " ")).join("|")})`: "") +
     `&_page=${page}` +

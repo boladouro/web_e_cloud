@@ -4,7 +4,7 @@ import React, { useContext, useEffect } from "react";
 import CartContext from "../entry.tsx";
 import Slider, { Settings as SliderSettings } from "react-slick";
 import { styled } from "styled-components";
-import { Book } from "../types/types.ts";
+import { Book } from "../types.ts";
 import CartComponent from "../Components/CartComponent.tsx";
 
 export default function Cart() {
@@ -34,8 +34,7 @@ export default function Cart() {
   `;
 
   const { Total, NBook, Books } = useContext(CartContext);
-  console.log(Books, "book");
-
+  console.log(Books, "book")
   const uniqueBookIds = new Set<string>();
 
   const bookCount: { [id: string]: number } = {};
