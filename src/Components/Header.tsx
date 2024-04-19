@@ -47,10 +47,10 @@ function Header({spacing= "h10vh"}) {
       <div className={"navbar-menu"} id={"header-menu"}>
         <div className={"navbar-start"}>
           <div className={"navbar-item has-dropdown is-hoverable"}>
-            <Link to={"/search?q="} className={"navbar-link"}>Discover</Link>
+            <Link to={"/search?q="} className={"navbar-link"}>Descobrir</Link>
             <div className={"navbar-dropdown"}>
-              <Link to={"/search?q=sort:publishedDate"} className={"navbar-item"}>New</Link>
-              <Link to={"/search?q=sort:score"} className={"navbar-item"}>Top Rated</Link>
+              <Link to={"/search?q=sort:publishedDate"} className={"navbar-item"}>Novos</Link>
+              <Link to={"/search?q=sort:score"} className={"navbar-item"}>Bem Avaliados</Link>
             </div>
           </div>
           <a id={"header-search-bar"} className={
