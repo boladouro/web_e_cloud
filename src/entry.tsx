@@ -21,7 +21,7 @@ import Search from "./routes/Search.tsx";
 const CartContext = createContext({
   NBook: 0,
   Total: 0,
-  Books: [],
+  Books: [] as Book[],
   addCart: (book: Book) => {}, 
   remoCart: (bookId: string) => {}, 
   clearCart: () => {},

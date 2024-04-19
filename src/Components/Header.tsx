@@ -6,7 +6,7 @@ import {Link, useLocation} from "react-router-dom";
 import CartContext from "../entry.tsx";
 import { FaShoppingBasket } from 'react-icons/fa';
 import { styled } from "styled-components";
-import { BulmaSize } from "@/types/types.ts";
+import { BulmaSize } from "@/types.ts";
 
 
 
@@ -24,7 +24,7 @@ function Header({spacing= "h10vh"}) {
 
 
   const BasketshoIcon = styled(FaShoppingBasket)`
-    position: flex;
+    display: flex;
     top: 32%;
     right: 2.5em;
     z-index: 4;

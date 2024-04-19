@@ -34,6 +34,6 @@ NOTA: LEMBRAR DE VER OS TODOS
 * [X]  b. Reutilização de componentes;
 * [X]  c. UseContext para gerir estado global da aplicação;
 * [X]  d. A estrutura do site deverá ter um Header com logo e menu;
-* [Z]  e. No menu incluir o contador com o número total de itens adicionados ao carrinho;
+* [X]  e. No menu incluir o contador com o número total de itens adicionados ao carrinho;
 * [X]  f. Footer
 * [X]  g. Responsive Design

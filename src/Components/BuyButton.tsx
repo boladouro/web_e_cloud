@@ -7,16 +7,27 @@ import CartContext from "../entry.tsx";
 import {Link} from "react-router-dom";
 import {toast} from "sonner"
 
-
-export function Buybutton({ size = "medium", book, }: { size: BulmaSize, book: Book, className?: string }) {
-  const BasketshoIcon = styled(FaShoppingBasket)`
-  position: flex;
-  top: 32%;
-  right: 2.5em;
-  z-index: 4;
-  color: var(--bulma-input-placeholder-color);
-  font-size: var(--bulma-size-${size});
+const BuyButton = styled.button`
+  position: relative;
+  top: 0;
+  left: 0; 
+  background-color: #2eb82e; 
+  color: #ffffff; 
+  border: none; 
+  border-radius: 5px; 
+  padding: 5px; 
+  text-align:center;
 `;
+
+export function Buybutton({ size = "medium", book}: { size: BulmaSize, book: Book, className?: string }) {
+  const BasketshoIcon = styled(FaShoppingBasket)`
+    display: flex;
+    top: 32%;
+    right: 2.5em;
+    z-index: 4;
+    color: var(--bulma-input-placeholder-color);
+    font-size: var(--bulma-size-${size});
+  `;
   const { addCart, Books, NBook} = useContext(CartContext);
 
   const BuyIcon = styled(FaCartPlus)`
@@ -27,7 +38,7 @@ export function Buybutton({ size = "medium", book, }: { size: BulmaSize, book: B
     font-size: var(--bulma-size-${size});
   `;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: Event) => {
     addCart(book);
     toast.success("Livro adicionado ao carrinho!");
   };
@@ -35,7 +46,7 @@ export function Buybutton({ size = "medium", book, }: { size: BulmaSize, book: B
 
   if (location.pathname !== "/search" && location.pathname !== "/home") {
     return (
-      <div className="flex-justify-space-evenly">
+      <div className={"flex-justify-space-evenly" }>
         <button onClick={handleAddToCart} style={{ display: "inline-flex", backgroundColor: '#2eb82e', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px', alignItems: "center" }}>
           <BuyIcon />
           <span style={{ marginLeft: '5px' }}>Comprar</span>
@@ -49,15 +60,11 @@ export function Buybutton({ size = "medium", book, }: { size: BulmaSize, book: B
       </div>
     );
   } else {
-    
-    return <div style={{ position: 'relative' }}>
-    <div className="content has-text-centered">
-      <button onClick={handleAddToCart} style={{ position: 'absolute', top: -150, right: 190, backgroundColor: '#2eb82e', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '5px', textAlign:"center"}}>
-        <BuyIcon />
-        <span style={{ margin: '2px' }}></span>
-      </button>
-    </div>
-  </div>
+    return <BuyButton onClick={handleAddToCart}>
+      <BuyIcon />
+      <span className={"m-r1"}></span>
+    </BuyButton>
+
   
   }
 }
