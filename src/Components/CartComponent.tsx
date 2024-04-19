@@ -27,11 +27,9 @@ export default function CartComponent({ book, count }: { book: Book, count: numb
         </Link>
         <div>
             <div className={"flex-justify-space-around"}>
-                <Link to={`/cart`} >
                 <button onClick={handleAddToCart} style={{ display: "inline-flex", backgroundColor: '#2eb82e', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px 20px 10px 20px', alignItems: "center" }}>
                     <span style={{ fontSize: '18px' }}>+</span>
                 </button>
-                </Link>
 
                 <button onClick={handleRemoToCart}  style={{ display: "inline-flex", backgroundColor: '#ff1a1a', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px 20px 10px 20px', alignItems: "center" }}>
                     <span style={{ fontSize: '18px' }}>-</span>
