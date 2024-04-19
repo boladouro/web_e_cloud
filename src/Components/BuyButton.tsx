@@ -31,19 +31,33 @@ export function Buybutton({ size = "medium", book, }: { size: BulmaSize, book: B
     addCart(book);
     toast.success("Livro adicionado ao carrinho!");
   };
+  console.log(location.pathname,"awdawd")
 
-  return (
-    <div className="flex-justify-space-evenly">
-      <button onClick={handleAddToCart} style={{display: "inline-flex", backgroundColor: '#2eb82e', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px', alignItems:"center" }}>
-        <BuyIcon />
-        <span style={{ marginLeft: '5px' }}>Comprar</span>
-      </button>
-      <Link to={`/cart`} className={"p-4 w10 h2xl"}>
-        <button style={{ display: "inline-flex", backgroundColor: '#007bff', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px', alignItems:"center" }}>
-          <BasketshoIcon />
-          <span style={{ marginLeft: '5px' }}>Carrinho</span>
+  if (location.pathname !== "/search" && location.pathname !== "/home") {
+    return (
+      <div className="flex-justify-space-evenly">
+        <button onClick={handleAddToCart} style={{ display: "inline-flex", backgroundColor: '#2eb82e', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px', alignItems: "center" }}>
+          <BuyIcon />
+          <span style={{ marginLeft: '5px' }}>Comprar</span>
         </button>
-      </Link>
+        <Link to={`/cart`} className={"p-4 w10 h2xl"}>
+          <button style={{ display: "inline-flex", backgroundColor: '#007bff', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '10px', alignItems: "center" }}>
+            <BasketshoIcon />
+            <span style={{ marginLeft: '5px' }}>Carrinho</span>
+          </button>
+        </Link>
+      </div>
+    );
+  } else {
+    
+    return <div style={{ position: 'relative' }}>
+    <div className="content has-text-centered">
+      <button onClick={handleAddToCart} style={{ position: 'absolute', top: -150, right: 190, backgroundColor: '#2eb82e', color: '#ffffff', border: 'none', borderRadius: '5px', padding: '5px', textAlign:"center"}}>
+        <BuyIcon />
+        <span style={{ margin: '2px' }}></span>
+      </button>
     </div>
-  );
+  </div>
+  
+  }
 }
