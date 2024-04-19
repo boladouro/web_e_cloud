@@ -10,8 +10,6 @@ import { BulmaSize } from "@/types/types.ts";
 
 
 
-
-// TODO add Links of dropdown
 // TODO add burger https://bulma.io/documentation/components/navbar/
 function Header({spacing= "h10vh"}) {
   const location = useLocation()

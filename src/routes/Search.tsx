@@ -12,7 +12,6 @@ import {
 
 } from "@/Components/ui/pagination"
 
-// TODO add message to when no book match
 // search bar is in header
 export default function Search() {
   const [books, paginationLinks] = useLoaderData() as [Book[], PaginationLinks?];
