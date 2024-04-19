@@ -28,7 +28,7 @@ export function Buybutton({ size = "medium", book}: { size: BulmaSize, book: Boo
     color: var(--bulma-input-placeholder-color);
     font-size: var(--bulma-size-${size});
   `;
-  const { addCart, Books, NBook} = useContext(CartContext);
+  const { addCart} = useContext(CartContext);
 
   const BuyIcon = styled(FaCartPlus)`
     top: 32%;
@@ -38,7 +38,7 @@ export function Buybutton({ size = "medium", book}: { size: BulmaSize, book: Boo
     font-size: var(--bulma-size-${size});
   `;
 
-  const handleAddToCart = (e: Event) => {
+  const handleAddToCart = () => {
     addCart(book);
     toast.success("Livro adicionado ao carrinho!");
   };
