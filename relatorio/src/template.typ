@@ -25,7 +25,7 @@
 #let algoKeywords = ("repetir", "até", "if", "then", "else", "vezes")
 #let project(fontsize:11pt, doc) ={
 
-  // set figure(placement: auto) TODO considerar
+  set figure(placement: bottom)
 
   // set algo(keywords: _algo-default-keywords) // doesnt work
   

@@ -1,6 +1,6 @@
 #import "template.typ": *
 
-#let titulo = [TODO TITULO]
+#let titulo = [React + React Router + json-server: Um Website Sobre Venda de Livros]
 #let subtitulo = [Projeto realizado no âmbito da Unidade Curricular de \ Projetos em Ambientes Web e Cloud]
 #let indice= false
 // TODO change to grid
