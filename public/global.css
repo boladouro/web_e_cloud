@@ -1,3 +1,20 @@
+
+
+.bodyimage {
+	background-image: url("https://wallup.net/wp-content/uploads/2019/09/08/648651-anime-beautiful-landscape-nature-scan-forest-sunlight-lake.jpg");
+	height: 100%;
+	filter: blur(8px);
+	-webkit-filter: blur(8px);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+  }
+
+body {
+	background: url("https://wallup.net/wp-content/uploads/2019/09/08/648651-anime-beautiful-landscape-nature-scan-forest-sunlight-lake.jpg") center/cover no-repeat;
+  
+  }
+
 .navbar-brand > .navbar-item:hover{
   background-color: transparent!important;
 
