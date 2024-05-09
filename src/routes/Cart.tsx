@@ -1,6 +1,5 @@
-import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import CartContext from "../entry.tsx";
 import Slider, { Settings as SliderSettings } from "react-slick";
 import { styled } from "styled-components";
