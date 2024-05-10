@@ -2,6 +2,10 @@
 .pixi
 *.egg-info
 
+# mongodb is messy with git, this should be included in the end but not for now
+db/*
+!db/.gitkeep
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,flask,pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,flask,pycharm
 
