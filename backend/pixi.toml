@@ -10,6 +10,7 @@ platforms = ["linux-64", "win-64", "osx-64"]
 start-server = "flask run --debug --port 5000"
 start-db = "mongod --port 27017 --dbpath ./db"
 setup-db = "mongoimport --db backend --collection books --file data/books.json"
+# start = "pixi run start-server & pixi run start-db" # doesn't work
 
 [dependencies]
 python = ">=3.12.3,<3.13"
@@ -21,3 +22,4 @@ pixi-pycharm = ">=0.0.5,<0.1"
 python-dotenv = ">=1.0.1,<1.1"
 mongodb = ">=6.0.12,<6.1"
 mongo-tools = ">=100.9.4,<100.10"
+flask-pymongo = ">=2.3.0,<2.4"

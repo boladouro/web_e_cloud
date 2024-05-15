@@ -14,6 +14,9 @@ Works under MIT License (MIT)    Copyright notices:
 - json-server                    Copyright (c) 2015 typicode
 - shadcn-ui                      Copyright (c) 2023 shadcn
 - tailwindcss                    Copyright (c) Tailwind Labs, Inc.
+- flask-cors                     Copyright (C) 2016 Cory Dolphin, Olin College
+- pyjwt                          Copyright (c) 2015-2022 José Padilla
+
 ------------------------------------------------------------------------------------------------------------------------
 The MIT License (MIT)
 
@@ -38,6 +41,7 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------------------------------------------------
 Works under Apache License 2.0  A copy of the attribution notices can be found on:
 - TypeScript                    https://github.com/microsoft/TypeScript/blob/main/ThirdPartyNoticeText.txt
+- PyMongo                       https://github.com/mongodb/mongo-python-driver/blob/master/THIRD-PARTY-NOTICES
 ------------------------------------------------------------------------------------------------------------------------
                                  Apache License
                            Version 2.0, January 2004
@@ -216,6 +220,63 @@ Works under Apache License 2.0  A copy of the attribution notices can be found o
 
    END OF TERMS AND CONDITIONS
 ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+Works under BSD-3-Clause  Copyright notices:
+- Flask                   Copyright 2010 Pallets
+- python-dotenv           Copyright (c) 2014, Saurabh Kumar (python-dotenv), 2013, Ted Tieken (django-dotenv-rw), 2013, Jacob Kaplan-Moss (django-dotenv)
+------------------------------------------------------------------------------------------------------------------------
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice,
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+   3. Neither the name of {{ project }} nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+Works under BSD-2-Clause  Copyright notices:
+flask-pymongo             Copyright (c) 2011-2017, Dan Crosta
+------------------------------------------------------------------------------------------------------------------------
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 No license but was used:
 "Go wild" - https://github.com/mxkaske/mxkaske.dev/issues/11#issuecomment-1741747394
 ------------------------------------------------------------------------------------------------------------------------
@@ -224,4 +285,5 @@ Notes:
 - json-server's v0 is under MIT License, v1 under Fair Source License
   (which is confusing since there's no payment option)
   I'm using an adapted version of v0, and its copyright notice is noted above.
+- mongo uses SSPL, but doesn't apply from what I read
 - please don't use gpl or "same license" licenses, they're confusing. thanks.
