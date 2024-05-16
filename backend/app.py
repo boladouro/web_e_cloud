@@ -1,3 +1,4 @@
+import pymongo
 from flask import Flask, jsonify
 from flask.json.provider import JSONProvider
 from pymongo import MongoClient
@@ -18,6 +19,7 @@ class MongoJSONProvider(JSONProvider):
 
   def dumps(self, obj, **kwargs):
     return json_util.dumps(obj, **kwargs)
+
   def loads(self, s, **kwargs):
     return json_util.loads(s, **kwargs)
 
@@ -39,4 +41,52 @@ if "books" not in db.list_collection_names():
 
 @app.route("/api/v1/books", methods=["GET"])
 def get_books():
-  return list(db.books.find({}))
+  # TODO falta paginacao
+  return list(db.books.find({}))[0]["books"]
+
+
+@app.route("/api/v1/books/<int:book_id>", methods=["GET"])
+def get_book(book_id: int):
+  book_id = str(book_id)
+  book = db.books.find_one({"books.id": book_id})
+  if not book:
+    return {"error": "Book not found"}, 404
+  return book
+
+
+@app.route("/api/v1/books", methods=["POST"])
+def create_book():
+  raise NotImplementedError()  # TODO auth
+
+
+@app.route("/api/v1/books/<int:book_id>", methods=["DELETE"])
+def delete_book(book_id):
+  raise NotImplementedError()  # TODO auth
+
+
+@app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
+def update_book(book_id):
+  raise NotImplementedError()
+
+
+@app.route("/api/v1/books/featured", methods=["GET"])
+def get_featured_books():
+  return list(db.books.aggregate([
+    {
+      "$unwind": "$books"
+    },
+    {
+      "$sort": {"books.score": pymongo.DESCENDING}
+    },
+    {
+      "$limit": 5
+    },
+    {
+      "$sort": {"books.price": pymongo.ASCENDING}
+    },
+    {
+      "$project":{
+        "_id": 0
+      }
+    }
+  ]))
