@@ -1,12 +1,12 @@
 db.getMongo().getDB("backend").books.aggregate([
   {$unwind:"$books"},
   {$replaceRoot:{newRoot:"$books"}},
-  {$addFields: {"publishedDate": {$toDate: {
-    $getField:{
-      field: {$literal: "$date"},
-      input: "publishedDate"
-    }
-  }}}},
+  // {$addFields: {"publishedDate": {$toDate: {
+  //   $getField:{
+  //     field: {$literal: "$date"},
+  //     input: "$publishedDate"
+  //   }
+  // }}}}, // afinal isto ja tem ISODate
   {$out: "books"}
 ]);
 // TODO publishedDate is becoming null

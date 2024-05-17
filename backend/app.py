@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 from bson import ObjectId, json_util
 import re
+from datetime import datetime
 
 load_dotenv()
 connection_string = os.getenv("MONGODB_CONECTION_STRING")
@@ -99,16 +100,50 @@ def get_total_books():
 
 @app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
 def get_books_author(autor:str):
+  # TODO falta paginacao
   return list(db.books.find({
     "authors": {"$elemMatch": {"$regex": autor, "$options": "i"}}
   }))
 
 @app.route("/api/v1/books/ano/<int:ano>")
 def get_book_ano(ano: int):
-  # TODO  publishedDate is becoming null on replaceRoot
+  # TODO falta paginacao
+  start = datetime(ano, 1, 1)
+  end = datetime(ano, 12, 31, 23, 59, 59)
   return list(db.books.find({
-    "publishedDate": {""}
+    "publishedDate": {
+      "$gte": start,
+      "$lte": end
+    }
   }))
+
+@app.route("/api/v1/books/categories/<string:categorias>")
+def get_books_category(categorias: str):
+  # TODO falta paginacao
+  categorias = categorias.split(",")
+  return list(db.books.find({})) # TODO
+
+@app.route("/api/v1/books/price/")
+def get_books_price():
+  # TODO falta paginacao
+  return list(db.books.find({})) # TODO
+
+@app.route("/api/v1/books/cart", methods=["POST"])
+def add_to_cart():
+  db.cart.insert_one({}) # TODO
+
+@app.route("/api/v1/user/signup", methods=["POST"])
+def signup():
+  db.users.insert_one({}) # TODO
+  raise NotImplementedError()
+
+@app.route("/api/v1/user/login", methods=["POST"])
+def login():
+  raise NotImplementedError()
+
+@app.route("/api/v1/user/confirmation", methods=["POST"])
+def logout():
+  raise NotImplementedError()
 
 if __name__ == "__main__":
   from pprint import pprint
