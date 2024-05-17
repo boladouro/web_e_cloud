@@ -9,7 +9,7 @@ platforms = ["linux-64", "win-64", "osx-64"]
 [tasks]
 start-server = "flask run --debug --port 5000"
 start-db = "mongod --port 27017 --dbpath ./db" # mongodb on conda only on version 6, we need 7, so this is external
-setup-db = "mongoimport --db backend --collection books --file data/books.json" # needs start-db, but async doesn't work
+setup-db = 'mongoimport --db backend --collection books --file data/books.json --drop && mongosh data/replaceRoot.mongodb' # needs start-db, but async doesn't work; also $out is not replacing for some reason
 # start = "pixi run start-server & pixi run start-db" # doesn't work
 
 

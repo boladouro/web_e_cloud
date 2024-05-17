@@ -1,0 +1,14 @@
+db.getMongo().getDB("backend").books.aggregate([
+  {$unwind:"$books"},
+  {$replaceRoot:{newRoot:"$books"}},
+  {$addFields: {"publishedDate": {$toDate: {
+    $getField:{
+      field: {$literal: "$date"},
+      input: "publishedDate"
+    }
+  }}}},
+  {$out: "books"}
+]);
+// TODO publishedDate is becoming null
+console.log(db.getMongo().getDB("backend").books.find({}).limit(1))
+console.log("Sucess")

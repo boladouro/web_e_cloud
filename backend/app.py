@@ -6,6 +6,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 from bson import ObjectId, json_util
+import re
 
 load_dotenv()
 connection_string = os.getenv("MONGODB_CONECTION_STRING")
@@ -42,13 +43,13 @@ if "books" not in db.list_collection_names():
 @app.route("/api/v1/books", methods=["GET"])
 def get_books():
   # TODO falta paginacao
-  return list(db.books.find({}))[0]["books"]
+  return list(db.books.find({}))
 
 
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
   book_id = str(book_id)
-  book = db.books.find_one({"books.id": book_id})
+  book = db.books.find_one({"id": book_id})
   if not book:
     return {"error": "Book not found"}, 404
   return book
@@ -73,20 +74,55 @@ def update_book(book_id):
 def get_featured_books():
   return list(db.books.aggregate([
     {
-      "$unwind": "$books"
+      "$match": {
+        "score": {"$exists": True},
+        "price": {"$exists": True}
+      }
     },
     {
-      "$sort": {"books.score": pymongo.DESCENDING}
+      "$sort": {"score": pymongo.DESCENDING}
     },
     {
       "$limit": 5
     },
     {
-      "$sort": {"books.price": pymongo.ASCENDING}
+      "$sort": {"price": pymongo.ASCENDING}
     },
-    {
-      "$project":{
-        "_id": 0
-      }
-    }
+    # {
+    #   "$project": {"score": 1, "price": 1}
+    # },
   ]))
+
+@app.route("/api/v1/books/total", methods=["GET"])
+def get_total_books():
+  return {"count": db.books.count_documents({})}
+
+@app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
+def get_books_author(autor:str):
+  return list(db.books.find({
+    "authors": {"$elemMatch": {"$regex": autor, "$options": "i"}}
+  }))
+
+@app.route("/api/v1/books/ano/<int:ano>")
+def get_book_ano(ano: int):
+  # TODO  publishedDate is becoming null on replaceRoot
+  return list(db.books.find({
+    "publishedDate": {""}
+  }))
+
+if __name__ == "__main__":
+  from pprint import pprint
+
+  t = [{'grades': {'grade': 80, 'mean': 75, 'std': 6, 'test': 1}},
+       {'grades': {'grade': 85, 'mean': 90, 'std': 4, 'test': 2}},
+       {'grades': {'grade': 95, 'mean': 85, 'std': 6, 'test': 3}},
+       {'grades': {'grade': 90, 'mean': 75, 'std': 6, 'test': 1}},
+       {'grades': {'grade': 87, 'mean': 90, 'std': 3, 'test': 2}},
+       {'grades': {'grade': 91, 'mean': 85, 'std': 4, 'test': 3}}]
+  pprint(list(db.aggregate([
+    {
+      "$documents": t
+    }, {
+      "$replaceRoot": {"newRoot": "$grades"}
+    },
+  ])))
