@@ -11,5 +11,12 @@ db.getMongo().getDB("backend").books.aggregate([
 ]);
 //  authors: 1, categories:1 // cannot be indexed because they're parallel arrays
 db.getMongo().getDB("backend").books.createIndex({title: "text", isbn: "text",shortDescription: "text", longDescription: "text"});
-console.log(db.getMongo().getDB("backend").books.find({}).limit(1))
-console.log("Sucess")
+db.getMongo().getDB("backend").users.drop();
+db.getMongo().getDB("backend").users.insertOne({
+  "username": "admin",
+  "password": "admin",
+  "confirmed": true
+});
+console.log(db.getMongo().getDB("backend").books.findOne({}))
+console.log(db.getMongo().getDB("backend").users.findOne({}))
+console.log("Success!");

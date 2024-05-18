@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from functools import wraps
+
 import flask
+import jwt
 import pymongo
 from flask import Flask, jsonify, request, after_this_request
 from flask.json.provider import JSONProvider
@@ -10,7 +13,7 @@ from dotenv import load_dotenv
 import os
 from bson import ObjectId, json_util
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pymongo.cursor import Cursor
 
@@ -35,6 +38,22 @@ app = Flask(__name__)
 app.json_provider_class = MongoJSONProvider
 app.json = MongoJSONProvider(app)
 CORS(app)
+app.config["SECRET_KEY"] = "b3baa5d340ecaad79abc375e930c180212b8e184eff44f7d7e36e40422c007a4"
+def token_required(func):
+  @wraps(func)
+  def decorated(*args, **kwargs):
+    token = request.args.get('token')
+    if not token:
+      return jsonify({'error': 'Token is missing!'}), 407
+    try:
+      data = jwt.decode(token, app.config["SECRET_KEY"],
+                        algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+      return jsonify({'error': 'token expired', 'expirado': True}), 401
+    return func(*args, **kwargs)
+  return decorated
+
+
 client = MongoClient(
   connection_string,
   tls=os.getenv("MONGODB_TLS", True) in ("1", "true", "True", "yes", "Yes", "y", "Y"),
@@ -112,7 +131,7 @@ def paginate(db, currentPipeline: list | dict):
 
 
 # 1
-@app.route("/api/v1/books", methods=["GET"])
+@app.route("/api/v1/books", methods=["GET"]) # /books/ leads to 404
 def get_books():
   q = request.args.get("q", False)
   if not q:
@@ -137,20 +156,34 @@ def get_book(book_id: int):
 
 # 3
 @app.route("/api/v1/books", methods=["POST"])
+@token_required
 def create_book():
-  raise NotImplementedError()  # TODO auth
+  book = request.args.get("book")
+  if not book:
+    return {"error": "book arg is missing"}, 400
+  db.books.insertOne(book)
+  return {"success": True}, 201
 
 
 # 4
 @app.route("/api/v1/books/<int:book_id>", methods=["DELETE"])
+@token_required
 def delete_book(book_id):
-  raise NotImplementedError()  # TODO auth
+  db.books.deleteOne({
+    "id": book_id
+  })
+  return {"success": True}, 200
 
 
 # 5
 @app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
+@token_required
 def update_book(book_id):
-  raise NotImplementedError()  # TODO auth
+  book = request.args.get("book")
+  if not book:
+    return {"error": "book arg is missing"}, 400
+  db.books.updateOne({"id": book_id}, {"$set": book})
+  return {"success": True}, 201
 
 
 # 6
@@ -241,27 +274,67 @@ def get_books_price():
 # 12 (1) # há dois 12s
 @app.route("/api/v1/books/cart", methods=["POST"])
 def add_to_cart():
-  db.cart.insert_one({})  # TODO
+  cart = json_util.loads(request.args.get("cart", False)) # I have no idea how cart should be formated but idc
+  if not cart:
+    return {"error": "Cart is missing"}, 400
+  db.cart.insert_one({
+    "timestamp": datetime.now(),
+    "cart": cart
+  })
+  return {"success": True}, 201
 
 
 # 12 (2)
 @app.route("/api/v1/user/signup", methods=["POST"])
 def signup():
-  db.users.insert_one({})  # TODO
-  raise NotImplementedError()
+  username = request.args.get("username", False)
+  password = request.args.get("password", False)
+  if not username or not password:
+    return {"error": "Missing username or password"}, 400
+  # check if username is already taken
+  if db.users.find_one({"username": username}):
+    return {"error": "Username already taken"}, 409
+  db.users.insert_one({
+    "username": username,
+    "password": password,
+    "confirmed": False,
+    "timestamp": datetime.now()
+  })
+  return {"success": True}, 201
 
 
 # 13
 @app.route("/api/v1/user/login", methods=["POST"])
 def login():
-  raise NotImplementedError()
+  username = request.args.get("username", False)
+  password = request.args.get("password", False)
+  if not username or not password:
+    return {"error": "Missing username or password"}, 400
+  user = db.users.find_one({"username": username, "password": password})
+  if not user:
+    return {"error": "Invalid username or password"}, 401
+  if user["confirmed"] is False:
+    return {"error": "User not confirmed"}, 403
+  token = jwt.encode({
+    "username": username,
+    "exp": datetime.now() + timedelta(minutes=30)
+  }, app.config["SECRET_KEY"])
+  return {"token": token}, 200
 
 
 # 14
 @app.route("/api/v1/user/confirmation", methods=["POST"])
-def logout():
-  raise NotImplementedError()
-
+@token_required
+def confirmation():
+  # if it has token it already is admin
+  target = request.args.get("username", False)
+  if not target:
+    return {"error": "Missing username"}, 400
+  user = db.users.find_one({"username": target})
+  if not user:
+    return {"error": "User not found"}, 404
+  db.users.update_one({"username": target}, {"$set": {"confirmed": True}})
+  return {"success": True}, 200
 
 if __name__ == "__main__":
   from pprint import pprint
