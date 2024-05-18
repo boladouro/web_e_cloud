@@ -83,19 +83,19 @@ def paginate(db, currentPipeline: list | dict):
         "pages": [
           {"$count": "docCount"},
           {"$addFields": {
-            "pageCount": {"$ceil": {"$divide": ["$docCount", limit]}}
+            "totalPageCount": {"$ceil": {"$divide": ["$docCount", limit]}}
           }},
           {"$project": {
             "docCount": 1,
-            "pageCount": 1,
+            "totalPageCount": 1,
             "first": f"{request.base_url}?{restOfArgs}&page=1" if page > 2 else None,
             "prev": f"{request.base_url}?{restOfArgs}&page={page - 1}" if page > 1 else None,
             "curr": f"{request.base_url}?{restOfArgs}&page={page}",
             "next": {
-              "$cond": {"if": {"$lt": [page, "$pageCount"]}, "then": f"{request.base_url}?{restOfArgs}&page={page + 1}",
+              "$cond": {"if": {"$lt": [page, "$totalPageCount"]}, "then": f"{request.base_url}?{restOfArgs}&page={page + 1}",
                         "else": None}},
-            "last": {"$cond": {"if": {"$lt": [page + 1, "$pageCount"]}, "then": {
-              "$concat": [f"{request.base_url}?{restOfArgs}&page=", {"$toString": "$pageCount"}]
+            "last": {"$cond": {"if": {"$lt": [page + 1, "$totalPageCount"]}, "then": {
+              "$concat": [f"{request.base_url}?{restOfArgs}&page=", {"$toString": "$totalPageCount"}]
             }, "else": None}},
           }}
         ],
@@ -106,9 +106,10 @@ def paginate(db, currentPipeline: list | dict):
       }
     },
   ])
-  import json
-  print(json.dumps(currentPipeline, indent=2))
+  # import json
+  # print(json.dumps(currentPipeline, indent=2))
   return list(db.aggregate(currentPipeline))[0]  # I don't know why dict fucks it
+
 
 # 1
 @app.route("/api/v1/books", methods=["GET"])
@@ -123,6 +124,7 @@ def get_books():
     }
   })
 
+
 # 2
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
@@ -132,20 +134,24 @@ def get_book(book_id: int):
     return {"error": "Book not found"}, 404
   return book
 
+
 # 3
 @app.route("/api/v1/books", methods=["POST"])
 def create_book():
   raise NotImplementedError()  # TODO auth
+
 
 # 4
 @app.route("/api/v1/books/<int:book_id>", methods=["DELETE"])
 def delete_book(book_id):
   raise NotImplementedError()  # TODO auth
 
+
 # 5
 @app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
 def update_book(book_id):
   raise NotImplementedError()  # TODO auth
+
 
 # 6
 @app.route("/api/v1/books/featured", methods=["GET"])
@@ -171,10 +177,12 @@ def get_featured_books():
     # },
   ]))
 
+
 # 7
 @app.route("/api/v1/books/total", methods=["GET"])
 def get_total_books():
   return {"count": db.books.count_documents({})}
+
 
 # 8
 @app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
@@ -182,6 +190,7 @@ def get_books_author(autor: str):
   return paginate(db.books, {
     "authors": {"$elemMatch": {"$regex": autor, "$options": "i"}}
   })
+
 
 # 9
 @app.route("/api/v1/books/ano/<int:ano>")
@@ -194,6 +203,13 @@ def get_book_ano(ano: int):
       "$lte": end
     }
   })
+
+
+@app.route("/api/v1/books/categories/")
+def get_books_categories():
+  return list(db.books.distinct("categories"))  # not indexed but that's a future problem
+
+
 # 10
 @app.route("/api/v1/books/categories/<string:categorias>")
 def get_books_category(categorias: str):
@@ -202,13 +218,14 @@ def get_books_category(categorias: str):
     "categories": {"$in": categorias}
   })
 
+
 # 11
 @app.route("/api/v1/books/price/")
 def get_books_price():
   try:
     min_price = int(request.args.get("minPrice", 0))
     max_price = int(request.args.get("maxPrice", 1000))
-    orderBy =  request.args.get("orderBy", "asc")
+    orderBy = request.args.get("orderBy", "asc")
     if orderBy not in ("asc", "desc"):
       raise ValueError("Invalid orderBy value, must be 'asc' or 'desc'")
   except ValueError as e:
@@ -220,10 +237,12 @@ def get_books_price():
     {"$sort": {"price": pymongo.ASCENDING if orderBy == "asc" else pymongo.DESCENDING}}
   ])
 
+
 # 12 (1) # há dois 12s
 @app.route("/api/v1/books/cart", methods=["POST"])
 def add_to_cart():
   db.cart.insert_one({})  # TODO
+
 
 # 12 (2)
 @app.route("/api/v1/user/signup", methods=["POST"])
@@ -231,10 +250,12 @@ def signup():
   db.users.insert_one({})  # TODO
   raise NotImplementedError()
 
+
 # 13
 @app.route("/api/v1/user/login", methods=["POST"])
 def login():
   raise NotImplementedError()
+
 
 # 14
 @app.route("/api/v1/user/confirmation", methods=["POST"])
