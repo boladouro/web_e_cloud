@@ -110,7 +110,7 @@ def paginate(db, currentPipeline: list | dict):
   print(json.dumps(currentPipeline, indent=2))
   return list(db.aggregate(currentPipeline))[0]  # I don't know why dict fucks it
 
-
+# 1
 @app.route("/api/v1/books", methods=["GET"])
 def get_books():
   q = request.args.get("q", False)
@@ -123,7 +123,7 @@ def get_books():
     }
   })
 
-
+# 2
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
   book_id = str(book_id)
@@ -132,22 +132,22 @@ def get_book(book_id: int):
     return {"error": "Book not found"}, 404
   return book
 
-
+# 3
 @app.route("/api/v1/books", methods=["POST"])
 def create_book():
   raise NotImplementedError()  # TODO auth
 
-
+# 4
 @app.route("/api/v1/books/<int:book_id>", methods=["DELETE"])
 def delete_book(book_id):
   raise NotImplementedError()  # TODO auth
 
-
+# 5
 @app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
 def update_book(book_id):
   raise NotImplementedError()  # TODO auth
 
-
+# 6
 @app.route("/api/v1/books/featured", methods=["GET"])
 def get_featured_books():
   return list(db.books.aggregate([
@@ -171,62 +171,72 @@ def get_featured_books():
     # },
   ]))
 
-
+# 7
 @app.route("/api/v1/books/total", methods=["GET"])
 def get_total_books():
   return {"count": db.books.count_documents({})}
 
-
+# 8
 @app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
 def get_books_author(autor: str):
-  # TODO falta paginacao
-  return list(db.books.find({
+  return paginate(db.books, {
     "authors": {"$elemMatch": {"$regex": autor, "$options": "i"}}
-  }))
+  })
 
-
+# 9
 @app.route("/api/v1/books/ano/<int:ano>")
 def get_book_ano(ano: int):
-  # TODO falta paginacao
   start = datetime(ano, 1, 1)
   end = datetime(ano, 12, 31, 23, 59, 59)
-  return list(db.books.find({
+  return paginate(db.books, {
     "publishedDate": {
       "$gte": start,
       "$lte": end
     }
-  }))
-
-
+  })
+# 10
 @app.route("/api/v1/books/categories/<string:categorias>")
 def get_books_category(categorias: str):
-  # TODO falta paginacao
   categorias = categorias.split(",")
-  return list(db.books.find({}))  # TODO
+  return paginate(db.books, {
+    "categories": {"$in": categorias}
+  })
 
-
+# 11
 @app.route("/api/v1/books/price/")
 def get_books_price():
-  # TODO falta paginacao
-  return list(db.books.find({}))  # TODO
+  try:
+    min_price = int(request.args.get("minPrice", 0))
+    max_price = int(request.args.get("maxPrice", 1000))
+    orderBy =  request.args.get("orderBy", "asc")
+    if orderBy not in ("asc", "desc"):
+      raise ValueError("Invalid orderBy value, must be 'asc' or 'desc'")
+  except ValueError as e:
+    return {"error": str(e)}, 400
+  return paginate(db.books, [
+    {"$match": {
+      "price": {"$gte": min_price, "$lte": max_price}
+    }},
+    {"$sort": {"price": pymongo.ASCENDING if orderBy == "asc" else pymongo.DESCENDING}}
+  ])
 
-
+# 12 (1) # há dois 12s
 @app.route("/api/v1/books/cart", methods=["POST"])
 def add_to_cart():
   db.cart.insert_one({})  # TODO
 
-
+# 12 (2)
 @app.route("/api/v1/user/signup", methods=["POST"])
 def signup():
   db.users.insert_one({})  # TODO
   raise NotImplementedError()
 
-
+# 13
 @app.route("/api/v1/user/login", methods=["POST"])
 def login():
   raise NotImplementedError()
 
-
+# 14
 @app.route("/api/v1/user/confirmation", methods=["POST"])
 def logout():
   raise NotImplementedError()
