@@ -1,5 +1,8 @@
+from __future__ import annotations
+
+import flask
 import pymongo
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, after_this_request
 from flask.json.provider import JSONProvider
 from pymongo import MongoClient
 from flask_cors import CORS
@@ -8,6 +11,8 @@ import os
 from bson import ObjectId, json_util
 import re
 from datetime import datetime
+
+from pymongo.cursor import Cursor
 
 load_dotenv()
 connection_string = os.getenv("MONGODB_CONECTION_STRING")
@@ -39,12 +44,84 @@ client = MongoClient(
 db = client["backend"]
 if "books" not in db.list_collection_names():
   ValueError("No books collection found, run `pixi run setup-db` or use mongoimport to create it")
+"""
+def get_pagination_links(request, count):
+  page = request.args.get("page", 1)
+  countPerPage = request.args.get("limit", 10)
+  base_url = request.base_url
+  total_pages = count // countPerPage
+  if count % countPerPage != 0:
+    total_pages += 1
+  if page > total_pages:
+    page = total_pages
+  if page < 1:
+    page = 1
+  restOfArgs = "&".join([f"{k}={v}" for k, v in request.args.items() if k != "page"])
+  return {
+    "first":  f"{base_url}?{restOfArgs}&page=1" if page > 2 else None, # if page = 2 then prev will cover
+    "prev":   f"{base_url}?{restOfArgs}&page={page - 1}" if page > 1 else None,
+    "curr":   f"{base_url}?{restOfArgs}&page={page}",
+    "next":   f"{base_url}?{restOfArgs}&page={page + 1}" if page < total_pages else None,
+    "last":   f"{base_url}?{restOfArgs}&page={total_pages}" if page < total_pages - 1 else None,
+  }
+"""
+
+
+def paginate(db, currentPipeline: list | dict):
+  restOfArgs = "&".join([f"{k}={v}" for k, v in request.args.items() if k != "page"])
+  page = request.args.get("page", 1)
+  limit = request.args.get("limit", 10)
+  if not bool(currentPipeline):  # if it's empty
+    currentPipeline = []
+  elif isinstance(currentPipeline, dict):
+    currentPipeline = [
+      {"$match": currentPipeline}
+    ]
+  currentPipeline.extend([
+    {
+      "$facet": {
+        "pages": [
+          {"$count": "docCount"},
+          {"$addFields": {
+            "pageCount": {"$ceil": {"$divide": ["$docCount", limit]}}
+          }},
+          {"$project": {
+            "docCount": 1,
+            "pageCount": 1,
+            "first": f"{request.base_url}?{restOfArgs}&page=1" if page > 2 else None,
+            "prev": f"{request.base_url}?{restOfArgs}&page={page - 1}" if page > 1 else None,
+            "curr": f"{request.base_url}?{restOfArgs}&page={page}",
+            "next": {
+              "$cond": {"if": {"$lt": [page, "$pageCount"]}, "then": f"{request.base_url}?{restOfArgs}&page={page + 1}",
+                        "else": None}},
+            "last": {"$cond": {"if": {"$lt": [page + 1, "$pageCount"]}, "then": {
+              "$concat": [f"{request.base_url}?{restOfArgs}&page=", {"$toString": "$pageCount"}]
+            }, "else": None}},
+          }}
+        ],
+        "data": [
+          {"$skip": (page - 1) * limit},
+          {"$limit": limit}
+        ]
+      }
+    },
+  ])
+  import json
+  print(json.dumps(currentPipeline, indent=2))
+  return list(db.aggregate(currentPipeline))[0]  # I don't know why dict fucks it
 
 
 @app.route("/api/v1/books", methods=["GET"])
 def get_books():
-  # TODO falta paginacao
-  return list(db.books.find({}))
+  q = request.args.get("q", False)
+  if not q:
+    return paginate(db.books, {})
+  # add pages
+  return paginate(db.books, {
+    "$text": {  # requires the fields to be indexed
+      "$search": q
+    }
+  })
 
 
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
@@ -68,7 +145,7 @@ def delete_book(book_id):
 
 @app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
 def update_book(book_id):
-  raise NotImplementedError()
+  raise NotImplementedError()  # TODO auth
 
 
 @app.route("/api/v1/books/featured", methods=["GET"])
@@ -94,16 +171,19 @@ def get_featured_books():
     # },
   ]))
 
+
 @app.route("/api/v1/books/total", methods=["GET"])
 def get_total_books():
   return {"count": db.books.count_documents({})}
 
+
 @app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
-def get_books_author(autor:str):
+def get_books_author(autor: str):
   # TODO falta paginacao
   return list(db.books.find({
     "authors": {"$elemMatch": {"$regex": autor, "$options": "i"}}
   }))
+
 
 @app.route("/api/v1/books/ano/<int:ano>")
 def get_book_ano(ano: int):
@@ -117,33 +197,40 @@ def get_book_ano(ano: int):
     }
   }))
 
+
 @app.route("/api/v1/books/categories/<string:categorias>")
 def get_books_category(categorias: str):
   # TODO falta paginacao
   categorias = categorias.split(",")
-  return list(db.books.find({})) # TODO
+  return list(db.books.find({}))  # TODO
+
 
 @app.route("/api/v1/books/price/")
 def get_books_price():
   # TODO falta paginacao
-  return list(db.books.find({})) # TODO
+  return list(db.books.find({}))  # TODO
+
 
 @app.route("/api/v1/books/cart", methods=["POST"])
 def add_to_cart():
-  db.cart.insert_one({}) # TODO
+  db.cart.insert_one({})  # TODO
+
 
 @app.route("/api/v1/user/signup", methods=["POST"])
 def signup():
-  db.users.insert_one({}) # TODO
+  db.users.insert_one({})  # TODO
   raise NotImplementedError()
+
 
 @app.route("/api/v1/user/login", methods=["POST"])
 def login():
   raise NotImplementedError()
 
+
 @app.route("/api/v1/user/confirmation", methods=["POST"])
 def logout():
   raise NotImplementedError()
+
 
 if __name__ == "__main__":
   from pprint import pprint

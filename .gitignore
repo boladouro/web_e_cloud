@@ -1,4 +1,6 @@
-temp.json
+books.json
+db.json
+temp.*
 temp/
 
 # Logs
