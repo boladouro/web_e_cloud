@@ -9,9 +9,10 @@ interface loaderParams {
 }
 
 export const bookLoader: LoaderFunction<Book> = async ({params}: loaderParams): Promise<Book> => {
-  const response = await fetch(`http://localhost:3030/books/${params.bookId}`)
+  const response = await fetch(`http://127.0.0.1:5000/api/v1/books/${params.bookId}`)
   if (response.ok) {
-    return response.json();
+    const data = await response.json();
+    return data.data[0].books 
   } else if (response.status == 404){
     throw new Response("Book not found", {status: 404})
   } else {
