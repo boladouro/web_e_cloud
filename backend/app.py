@@ -147,11 +147,21 @@ def get_books():
 # 2
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
-  book_id = str(book_id)
-  book = db.books.find_one({"id": book_id})
-  if not book:
-    return {"error": "Book not found"}, 404
-  return book
+    book_id_str = str(book_id)
+    print(f"Looking for book with id: {book_id_str}")  # Debugging print
+    
+    # Try to find the book using a different approach
+    try:
+        # Using find to get all books and filtering manually for more control
+        books = list(db.books.find())
+        book = next((book for book in books if book.get("id") == book_id_str), None)
+        print(f"Book found: {book}")  # Debugging print
+        if not book:
+            return jsonify({"error": "Book not found"}), 404
+        return jsonify(book)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500
 
 
 # 3

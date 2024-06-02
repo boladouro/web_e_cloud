@@ -17,13 +17,13 @@ function Home() {
   const numberOfBooksForSlider = 8
   const fetchBooksByPopularity: () => Promise<Book[]> = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/v1/books?_limit=${numberOfBooksForSlider}`);
+      const response = await fetch(`http://127.0.0.1:5000/api/v1/books`);
       if (!response.ok) {
         throw new Error('Failed to fetch books');
       }
       const data = await response.json();
       // Se os dados estiverem aninhados dentro de uma chave "data", acesse essa chave
-      return data.data[0].books || [];
+      return data.data || [];
     } catch (error) {
       console.error('Error fetching books:', error);
       return [];
