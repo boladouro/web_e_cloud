@@ -56,34 +56,13 @@ def token_required(func):
 
 client = MongoClient(
   connection_string,
-  tls=os.getenv("MONGODB_TLS", True) in ("1", "true", "True", "yes", "Yes", "y", "Y"),
+  tls=os.getenv("MONGODB_TLS", False) in ("1", "true", "True", "yes", "Yes", "y", "Y"), # dfault is False
   tlsAllowInvalidCertificates=True,
   timeoutMS=5000,
 )
 db = client["backend"]
 if "books" not in db.list_collection_names():
   ValueError("No books collection found, run `pixi run setup-db` or use mongoimport to create it")
-"""
-def get_pagination_links(request, count):
-  page = request.args.get("page", 1)
-  countPerPage = request.args.get("limit", 10)
-  base_url = request.base_url
-  total_pages = count // countPerPage
-  if count % countPerPage != 0:
-    total_pages += 1
-  if page > total_pages:
-    page = total_pages
-  if page < 1:
-    page = 1
-  restOfArgs = "&".join([f"{k}={v}" for k, v in request.args.items() if k != "page"])
-  return {
-    "first":  f"{base_url}?{restOfArgs}&page=1" if page > 2 else None, # if page = 2 then prev will cover
-    "prev":   f"{base_url}?{restOfArgs}&page={page - 1}" if page > 1 else None,
-    "curr":   f"{base_url}?{restOfArgs}&page={page}",
-    "next":   f"{base_url}?{restOfArgs}&page={page + 1}" if page < total_pages else None,
-    "last":   f"{base_url}?{restOfArgs}&page={total_pages}" if page < total_pages - 1 else None,
-  }
-"""
 
 
 def paginate(db, currentPipeline: list | dict):
@@ -130,7 +109,43 @@ def paginate(db, currentPipeline: list | dict):
   return list(db.aggregate(currentPipeline))[0]  # I don't know why dict fucks it
 
 
-# 1
+"""
+@api {get} /api/v1/books Search books, with pagination;
+@apiName GetBooks
+@apiGroup Book
+
+@apiQuery   {string}   q                      The query to search; will search between title, isbn, shortDescription, and longDescription
+
+
+@apiSuccess {array}    data                   Array of books result of query, limited by the limit param
+
+@apiSuccess {array}        pages                  An array with the first element having the pages.
+@apiSuccess {int}          pages.0.docCount       Total books of the query
+@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.0.curr           Link for the current page
+@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+
+@apiSuccessExample {json} Success-Response:
+
+{
+  "data": [{...}, {...}, {...}],
+  "pages": [
+    {
+      "docCount": 100,
+      "totalPageCount": 10,
+      "first": "/api/v1/books?q=foo&page=1",
+      "prev": "/api/v1/books?q=foo&page=2",
+      "curr": "/api/v1/books?q=foo&page=3",
+      "next": "/api/v1/books?q=foo&page=4",
+      "last": "/api/v1/books?q=foo&page=10"
+    }
+  ]
+}
+     
+"""
 @app.route("/api/v1/books", methods=["GET"]) # /books/ leads to 404
 def get_books():
   q = request.args.get("q", False)
@@ -144,7 +159,6 @@ def get_books():
   })
 
 
-# 2
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
   book_id = str(book_id)
@@ -335,6 +349,7 @@ def confirmation():
     return {"error": "User not found"}, 404
   db.users.update_one({"username": target}, {"$set": {"confirmed": True}})
   return {"success": True}, 200
+
 
 if __name__ == "__main__":
   from pprint import pprint

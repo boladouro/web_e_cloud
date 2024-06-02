@@ -1,6 +1,29 @@
 # Projecto de Projetos em Ambientes Web e Cloud
 
-NOTA: LEMBRAR DE VER OS TODOS
+## QuickStart
+Instalar node, [pixi](https://pixi.sh/latest/#installation), e [mongosh](https://www.mongodb.com/try/download/shell); dps:
+```
+git clone --recurse-submodules https://github.com/boladouro/web_e_cloud.git
+cd web_e_cloud
+npm install
+cd backend 
+pixi install
+pixi run setup-db
+"MONGODB_CONECTION_STRING=mongodb://localhost:27017" > .env
+cd ..
+npm run dev
+```
+Cada comando está nos respetivos `package.json` e `pixi.toml`, mas:
+
+- `npm run dev` para correr o frontend em debug mode
+- `npm run build` para fazer build do frontend
+- `npm run preview-build` para correr o frontend em produção
+- `cd backend && pixi run setup` para correr o backend
+- `pixi run start-db` para correr o mongod
+- `pixi run start-server` para correr o middleman (o que corre os comandos para o mongo)
+- `npm run genDocs` generates the api docs
+
+Finalmente, para ver os docs do api, abre o `./backend/docs/index.html`.
 
 ## Funcionalidades
 
