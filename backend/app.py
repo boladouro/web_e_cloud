@@ -148,14 +148,12 @@ def get_books():
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
     book_id_str = str(book_id)
-    print(f"Looking for book with id: {book_id_str}")  # Debugging print
     
     # Try to find the book using a different approach
     try:
         # Using find to get all books and filtering manually for more control
         books = list(db.books.find())
         book = next((book for book in books if book.get("id") == book_id_str), None)
-        print(f"Book found: {book}")  # Debugging print
         if not book:
             return jsonify({"error": "Book not found"}), 404
         return jsonify(book)

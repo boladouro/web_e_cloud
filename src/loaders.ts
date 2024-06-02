@@ -12,7 +12,7 @@ export const bookLoader: LoaderFunction<Book> = async ({params}: loaderParams): 
   const response = await fetch(`http://127.0.0.1:5000/api/v1/books/${params.bookId}`)
   if (response.ok) {
     const data = await response.json();
-    return data.data
+    return data
   } else if (response.status == 404){
     throw new Response("Book not found", {status: 404})
   } else {
@@ -41,10 +41,9 @@ export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderPara
   const page = urlParams.get("page") ?? "1"
   const attrs = ["title", "isbn", "publishedDate.$date", "shortDescription", "longDescription", "authors", "categories"]
   const response = await fetch(
-    `http://127.0.0.1:5000/api/v1/books/` +
+    `http://127.0.0.1:5000/api/v1/books?` +
     `q=${qNoFilters}` +
     `&attr=${attrs.join(",")}` +
-    `&_sort=${filters.sort ?? "publishedDate" }` +
     `&_order=${order}` +
     `&title_like=${filters.title?.replace("+", " ") ?? ""}` +
     `&authors_like=${filters.author?.replace("+", " ") ?? ""}` +
@@ -60,6 +59,7 @@ export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderPara
   console.log(response)
   if (!response.headers.has("link") || response.headers.get("link")!.trim() === "") {
     const data = await response.json();
+    console.log("id",data)
       // Se os dados estiverem aninhados dentro de uma chave "data", acesse essa chave
     return [await data.data, undefined]
   }
