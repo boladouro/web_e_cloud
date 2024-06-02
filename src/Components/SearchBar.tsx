@@ -22,11 +22,13 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
   const [openDialog, setOpenDialog] = React.useState(false)
 
   useEffect(() => {
-    const response = fetch(`http://localhost:3030/books`).then((response) => {
+    const response = fetch(`http://127.0.0.1:5000/api/v1/books`).then(async (response) => {
       if (!response.ok) {
         throw response
       }
-      return response.json() as Promise<Book[]>
+      const data = await response.json();
+      // Se os dados estiverem aninhados dentro de uma chave "data", acesse essa chave
+      return data.data as Promise<Book[]>
     }).then((books) => {
       books.map(book => book.categories).flat()
       return Array.from(new Set(books.map(book => book.categories).flat())).sort()
