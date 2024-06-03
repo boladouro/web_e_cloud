@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Form, useSearchParams, useSubmit} from "react-router-dom";
 import styled from 'styled-components';
 import {FaFilter, FaSearch} from 'react-icons/fa';
-import {Book, BulmaSize, filters, filtersKeys} from "../types.ts"; // Import the Font Awesome icon
+import {BulmaSize, filtersKeys} from "../types.ts"; // Import the Font Awesome icon
 import {toast} from "sonner"
 import {addToFilter, qSeparateColon} from "@/lib/utils.ts";
 import {Dialog, DialogContent, DialogTrigger} from "@/Components/ui/dialog.tsx";
@@ -22,17 +22,16 @@ export function SearchBar({size = "medium", className = "", autofocus}: {
   const [openDialog, setOpenDialog] = React.useState(false)
 
   useEffect(() => {
-    const response = fetch(`http://127.0.0.1:5000/api/v1/books`).then(async (response) => {
+    const response = fetch(`http://127.0.0.1:5000/api/v1/books/categorias`).then(async (response) => {
       if (!response.ok) {
         throw response
       }
-      const data = await response.json();
-      // Se os dados estiverem aninhados dentro de uma chave "data", acesse essa chave
-      return data.data as Promise<Book[]>
-    }).then((books) => {
-      books.map(book => book.categories).flat()
-      return Array.from(new Set(books.map(book => book.categories).flat())).sort()
-    }).then(setCategories)
+      return await response.json() as Promise<string[]>
+    }).then((categorias) => {
+      setCategories(categorias)
+    }).catch((error) => {
+      console.error("Failed to fetch categories", error)
+    })
   }, [])
   useEffect(() => {
     setQ(searchParams.get("q") ?? "")

@@ -488,7 +488,7 @@ def get_book_ano(ano: int):
 
 
 """
-@api {get} /api/v1/books/categorias Get all books categories
+@api {get} /api/v1/books/categorias Get all book categories
 @apiName GetBooksCategories
 @apiGroup Book
 

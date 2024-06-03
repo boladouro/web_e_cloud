@@ -15,12 +15,13 @@ npm run dev
 ```
 Cada comando está nos respetivos `package.json` e `pixi.toml`, mas:
 
-- `npm run dev` para correr o frontend em debug mode
+- `npm run dev` para correr o backend e o frontend em debug mode
+- `npm run dev-front` para correr o frontend em debug mode
 - `npm run build` para fazer build do frontend
 - `npm run preview-build` para correr o frontend em produção
-- `cd backend && pixi run setup` para correr o backend
-- `pixi run start-db` para correr o mongod
-- `pixi run start-server` para correr o middleman (o que corre os comandos para o mongo)
+- `cd backend && pixi run setup` para preparar a db
+- `cd backend && pixi run start-db` para correr o mongod
+- `cd backend && pixi run start-server` para correr o middleman (o que corre os comandos para o mongo)
 - `npm run genDocs` generates the api docs
 
 Finalmente, para ver os docs do api, abre o `./backend/docs/index.html`.

@@ -1,6 +1,6 @@
 [project]
 name = "backend"
-version = "0.1.0"
+version = "1.0.0"
 description = "Add a short description here"
 authors = ["notPlancha <andre.plancha@hotmail.com>"]
 channels = ["conda-forge"]

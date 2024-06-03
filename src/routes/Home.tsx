@@ -15,23 +15,22 @@ const HomeH1 = styled.h1`
 
 function Home() {
   const numberOfBooksForSlider = 8
-  const fetchBooksByPopularity: () => Promise<Book[]> = async () => {
+  const fetchFeaturedBooks: () => Promise<Book[]> = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/v1/books`);
+      const response = await fetch(`http://127.0.0.1:5000/api/v1/books/featured`);
       if (!response.ok) {
         throw new Error('Failed to fetch books');
       }
       const data = await response.json();
-      // Se os dados estiverem aninhados dentro de uma chave "data", acesse essa chave
-      return data.data || [];
+      return data || [];
     } catch (error) {
-      console.error('Error fetching books:', error);
+      console.error('Error fetching featured books:', error);
       return [];
     }
   };
   const [books, setBooks] = React.useState<Book[]>([])
   useEffect(() => {
-    const prom = fetchBooksByPopularity();
+    const prom = fetchFeaturedBooks();
     prom.then((books: Book[]) => {
       console.log("books", books)
       setBooks(books)
