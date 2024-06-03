@@ -4,7 +4,7 @@ import React, {useContext, useEffect} from "react";
 import {SearchBar} from "./SearchBar.tsx";
 import {Link, useLocation} from "react-router-dom";
 import CartContext from "../entry.tsx";
-import { FaShoppingBasket } from 'react-icons/fa';
+import {FaShoppingBasket, FaUser} from 'react-icons/fa';
 import { styled } from "styled-components";
 import { BulmaSize } from "@/types.ts";
 
@@ -24,6 +24,15 @@ function Header({spacing= "h10vh"}) {
 
 
   const BasketshoIcon = styled(FaShoppingBasket)`
+    display: flex;
+    top: 32%;
+    right: 2.5em;
+    z-index: 4;
+    color: var(--bulma-input-placeholder-color);
+    font-size: large;
+  `;
+
+  const UserIcon = styled(FaUser)`
     display: flex;
     top: 32%;
     right: 2.5em;
@@ -61,6 +70,9 @@ function Header({spacing= "h10vh"}) {
           <span className="navbar-item">{NBook}</span>
           <Link to={"/cart"} className={"navbar-item important:hover:bg-transparent"}>
             <BasketshoIcon />
+          </Link>
+          <Link to={"/auth"} className={"navbar-item important:hover:bg-transparent"}>
+            <UserIcon />
           </Link>
         </div>
       </div>

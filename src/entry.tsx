@@ -17,6 +17,7 @@ import CartPage from './routes/Cart.tsx';
 import { ShouldRevalidateFunctionArgs } from "@remix-run/router/utils.ts";
 import { bookLoader, searchLoader } from "./loaders.ts";
 import Search from "./routes/Search.tsx";
+import AuthPage from "@/routes/Auth.tsx";
 
 const CartContext = createContext({
   NBook: 0,
@@ -92,7 +93,8 @@ const router = createBrowserRouter([
       {
         path: "cart/",
         element: <CartPage />,
-      }
+      },
+      {path: "auth/", element: <AuthPage />},
     ]
   },
 ]);

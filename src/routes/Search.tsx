@@ -14,16 +14,16 @@ import {
 export default function Search() {
   const loaderData = useLoaderData() as QueryResults;
   console.log(loaderData)
-  const { data: books, pages: paginationLinks } = loaderData;
+  const { data: books, pages:pages } = loaderData;
   const [renderPagination, setRenderPagination] = useState<boolean>(false);
 
   useEffect(() => {
-    if (paginationLinks) {
+    if (pages) {
       setRenderPagination(true);
     } else {
       setRenderPagination(false);
     }
-  }, [paginationLinks]);
+  }, [pages]);
 
   let [searchParams, setSearchParams] = useSearchParams();
   const currPage = parseInt(searchParams.get("page") ?? "1");
@@ -43,31 +43,31 @@ export default function Search() {
           </div>
         ))}
       </div>
-      {renderPagination && paginationLinks && (
+      {renderPagination && pages && (
         <Pagination>
           <PaginationContent>
             {currPage > 2 && (
               <PaginationItem>
                 <PaginationLink
                   onClick={() => {
-                    searchParams.set("page", paginationLinks.first!.toString());
+                    searchParams.set("page", pages.first!.toString());
                     setSearchParams(searchParams);
                   }}
                 >
-                  {paginationLinks.first}
+                  {pages.first}
                 </PaginationLink>
               </PaginationItem>
             )}
             {currPage > 3 && <PaginationEllipsis />}
-            {paginationLinks.prev && (
+            {pages.prev && (
               <PaginationItem>
                 <PaginationLink
                   onClick={() => {
-                    searchParams.set("page", paginationLinks.prev!.toString());
+                    searchParams.set("page", pages.prev!.toString());
                     setSearchParams(searchParams);
                   }}
                 >
-                  {paginationLinks.prev}
+                  {pages.prev}
                 </PaginationLink>
               </PaginationItem>
             )}
@@ -82,28 +82,28 @@ export default function Search() {
                 {currPage}
               </PaginationLink>
             </PaginationItem>
-            {paginationLinks.next && (
+            {pages.next && (
               <PaginationItem>
                 <PaginationLink
                   onClick={() => {
-                    searchParams.set("page", paginationLinks.next!.toString());
+                    searchParams.set("page", pages.next!.toString());
                     setSearchParams(searchParams);
                   }}
                 >
-                  {paginationLinks.next}
+                  {pages.next}
                 </PaginationLink>
               </PaginationItem>
             )}
-            {currPage < (paginationLinks.last as unknown as number) - 2 && <PaginationEllipsis />}
-            {currPage < (paginationLinks.last as unknown as number) - 1 && (
+            {currPage < (pages.last as unknown as number) - 2 && <PaginationEllipsis />}
+            {currPage < (pages.last as unknown as number) - 1 && (
               <PaginationItem>
                 <PaginationLink
                   onClick={() => {
-                    searchParams.set("page", paginationLinks.last!.toString());
+                    searchParams.set("page", pages.last!.toString());
                     setSearchParams(searchParams);
                   }}
                 >
-                  {paginationLinks.last}
+                  {pages.last}
                 </PaginationLink>
               </PaginationItem>
             )}

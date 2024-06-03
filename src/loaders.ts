@@ -1,5 +1,5 @@
 import {LoaderFunction, Params} from "react-router-dom";
-import {Book, PaginationLinks, QueryResults} from "./types.ts";
+import {Book, QueryResults} from "./types.ts";
 
 interface loaderParams {
   request: Request,
