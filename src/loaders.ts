@@ -21,55 +21,103 @@ export const bookLoader: LoaderFunction<Book> = async ({params}: loaderParams): 
 }
 
 export type paginationHeaderResult = `<${string}>; rel="${string}"`
-// If the price is empty then it' doesn't query but that shouldn't happen irl
-export const searchLoader: LoaderFunction<Book[]> = async ({request}: loaderParams): Promise<[Book[], PaginationLinks?]> => {
-  // headers.link:
-  // <http://localhost:3030/books?q=&_page=1&_limit=10>; rel="first", <http://localhost:3030/books?q=&_page=1&_limit=10>; rel="prev", <http://localhost:3030/books?q=&_page=3&_limit=10>; rel="next", <http://localhost:3030/books?q=&_page=4&_limit=10>; rel="last"
+//If the price is empty then it' doesn't query but that shouldn't happen irl
+type OrderType = "asc" | "desc";
+type SortableFields = "score" | "publishedDate" | "price" | "-score" | "-publishedDate" | "-price";
 
-  const urlParams = new URL(request.url).searchParams
-  const q = urlParams.get("q") ?? ""
-  const [qNoFilters, filters] = qSeparateColon(q)
-  let order: "asc" | "desc";
-  // const sort = urlParams.get("sort") ?? "score,publishedDate.$date" // no score available in api
+type Filters = {
+  sort?: string;
+  author?: string;
+  publishedDate?: string[];
+  category?: Set<string>;
+  price?: string[];
+};
+
+export const searchLoader: LoaderFunction<Book[]> = async ({ request }: { request: Request }): Promise<[Book[], PaginationLinks?]> => {
+  const urlParams = new URL(request.url).searchParams;
+  const q = urlParams.get("q") ?? "";
+  const [qNoFilters, filters]: [string, Filters] = qSeparateColon(q);
+  
+  let order: OrderType = "asc";
+  
+  // Processar a ordenação
   if (filters.sort?.startsWith("-")) {
-    // @ts-expect-error
-    filters.sort = filters.sort.slice(1)
-    order = "desc"
+    filters.sort = filters.sort.slice(1) as SortableFields;
+    order = "desc";
   } else {
-    order = "asc"
+    order = "asc";
   }
-  const page = urlParams.get("page") ?? "1"
-  const attrs = ["title", "isbn", "publishedDate.$date", "shortDescription", "longDescription", "authors", "categories"]
-  const response = await fetch(
-    `http://127.0.0.1:5000/api/v1/books?` +
-    `q=${qNoFilters}` +
-    `&attr=${attrs.join(",")}` +
-    `&_order=${order}` +
-    `&title_like=${filters.title?.replace("+", " ") ?? ""}` +
-    `&authors_like=${filters.author?.replace("+", " ") ?? ""}` +
-    // `&price_gte=${filters.price?.[0] ?? "0"}` +
-    // `&price_lte=${filters.price?.[1] ?? "1000000"}` +
-    // `&publishedDate.$date_gte=${filters.publishedDate?.[0] ?? "19000101"}` +
-    // `&publishedDate.$date_lte=${filters.publishedDate?.[1] ?? "30000101"}` +
-    // categories is an OR array
-    (filters.category ? `&categories_like=(?:${[...filters.category!].map(val => val.replace("+", " ")).join("|")})`: "") +
-    `&_page=${page}` +
-    `&_limit=10`
-  ) // dont care abt sql injection
-  console.log(response)
-  if (!response.headers.has("link") || response.headers.get("link")!.trim() === "") {
-    const data = await response.json();
-    console.log("id",data)
-      // Se os dados estiverem aninhados dentro de uma chave "data", acesse essa chave
-    return [await data.data, undefined]
+  
+  // Parâmetros comuns
+  const page = urlParams.get("page") ?? "1";
+  const attrs = ["title", "publishedDate.$date", "authors", "categories"];
+  const baseUrl = "http://127.0.0.1:5000/api/v1/books";
+  
+
+  let apiUrl = baseUrl;
+  
+
+  if (filters.author) {
+    apiUrl += `/autor/${filters.author.replace("+", " ")}`;
+  } else if (filters.publishedDate) {
+
+    if (filters.publishedDate[0]) {
+      const ano = (filters.publishedDate[0] as unknown as string).slice(0, 4); 
+      apiUrl += `/ano/${ano}`;
+    }
+  } else if (filters.category) {
+
+    const categorias = Array.from(filters.category).map((val: string) => val.replace("+", " ")).join(",");
+    apiUrl += `/categorias/${categorias}`;
+  } else if (filters.price) {
+
+    const minPrice = filters.price[0] ?? "0";
+    const maxPrice = filters.price[1] ?? "1000000";
+    apiUrl += `/price/?minPrice=${minPrice}&maxPrice=${maxPrice}&orderBy=${order}`;
+  } else {
+    apiUrl += `/featured`;
   }
-  // @ts-expect-error
-  const links: PaginationLinks = {}
-  response.headers.get("link")?.split(", ").map((link: string) => {
-    let [url, rel] = link.split("; ")
-    url = url.slice(1, -1)
-    rel = rel.slice(5, -1)
-    links[rel as keyof PaginationLinks] = [parseInt(new URL(url).searchParams.get("_page") ?? "1"), url]
-  })
-  return [await response.json(), links]
+  
+
+  apiUrl += `?q=${qNoFilters}&attr=${attrs.join(",")}&_page=${page}&_limit=10`;
+  
+  console.log(`Fetching URL: ${apiUrl}`);
+  
+  const response = await fetch(apiUrl);
+  const books: Book[] = await response.json();
+
+  const linkHeader = response.headers.get('link');
+  let paginationLinks: PaginationLinks | undefined = undefined;
+
+  if (linkHeader) {
+    paginationLinks = parseLinkHeader(linkHeader);
+  }
+  
+  return [books, paginationLinks];
+};
+
+
+type PaginationLinks = {
+  first?: string;
+  prev?: string;
+  next?: string;
+  last?: string;
+};
+
+
+function parseLinkHeader(header: string): PaginationLinks {
+  const links: PaginationLinks = {};
+  const parts = header.split(',');
+
+  parts.forEach(part => {
+    const section = part.split(';');
+    if (section.length !== 2) return;
+
+    const url = section[0].replace(/<(.*)>/, '$1').trim();
+    const name = section[1].replace(/rel="(.*)"/, '$1').trim() as keyof PaginationLinks;
+
+    links[name] = url;
+  });
+
+  return links;
 }
