@@ -1,5 +1,5 @@
 import { Book, QueryResults } from "../types.ts";
-import { useLoaderData, useSearchParams } from "react-router-dom";
+import {useLoaderData, useLocation, useSearchParams} from "react-router-dom";
 import BookComponent from "../Components/BookComponent.tsx";
 import React, { useEffect, useState } from "react";
 
@@ -11,14 +11,23 @@ import {
   PaginationLink,
 } from "@/Components/ui/pagination";
 
+function getPageNumberFromUrl(url: string): number | null {
+  const urlParams = new URL(url).searchParams;
+  const page = urlParams.get("page");
+  if (page) {
+    return parseInt(page);
+  }
+  return null;
+}
+
 export default function Search() {
   const loaderData = useLoaderData() as QueryResults;
   console.log(loaderData)
-  const { data: books, pages:pages } = loaderData;
+  const { data: books, pages } = loaderData;
   const [renderPagination, setRenderPagination] = useState<boolean>(false);
-
+  const location = useLocation();
   useEffect(() => {
-    if (pages) {
+    if (pages?.docCount > 1) {
       setRenderPagination(true);
     } else {
       setRenderPagination(false);
@@ -48,34 +57,23 @@ export default function Search() {
           <PaginationContent>
             {currPage > 2 && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => {
-                    searchParams.set("page", pages.first!.toString());
-                    setSearchParams(searchParams);
-                  }}
-                >
-                  {pages.first}
+                <PaginationLink href={pages.first!}>
+                  {getPageNumberFromUrl(pages.first!)}
                 </PaginationLink>
               </PaginationItem>
             )}
             {currPage > 3 && <PaginationEllipsis />}
             {pages.prev && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => {
-                    searchParams.set("page", pages.prev!.toString());
-                    setSearchParams(searchParams);
-                  }}
-                >
-                  {pages.prev}
+                <PaginationLink href={pages.prev!}>
+                  {getPageNumberFromUrl(pages.prev!)}
                 </PaginationLink>
               </PaginationItem>
             )}
             <PaginationItem>
               <PaginationLink
                 onClick={() => {
-                  searchParams.set("page", currPage.toString());
-                  setSearchParams(searchParams);
+
                 }}
                 isActive={true}
               >
@@ -84,26 +82,16 @@ export default function Search() {
             </PaginationItem>
             {pages.next && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => {
-                    searchParams.set("page", pages.next!.toString());
-                    setSearchParams(searchParams);
-                  }}
-                >
-                  {pages.next}
+                <PaginationLink href={pages.next!}>
+                  {getPageNumberFromUrl(pages.next!)}
                 </PaginationLink>
               </PaginationItem>
             )}
             {currPage < (pages.last as unknown as number) - 2 && <PaginationEllipsis />}
             {currPage < (pages.last as unknown as number) - 1 && (
               <PaginationItem>
-                <PaginationLink
-                  onClick={() => {
-                    searchParams.set("page", pages.last!.toString());
-                    setSearchParams(searchParams);
-                  }}
-                >
-                  {pages.last}
+                <PaginationLink href={pages.last!}>
+                  {getPageNumberFromUrl(pages.last!)}
                 </PaginationLink>
               </PaginationItem>
             )}

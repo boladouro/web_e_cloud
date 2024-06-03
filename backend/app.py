@@ -67,8 +67,8 @@ if "books" not in db.list_collection_names():
 
 def paginate(db, currentPipeline: list | dict):
   restOfArgs = "&".join([f"{k}={v}" for k, v in request.args.items() if k != "page"])
-  page = request.args.get("page", 1)
-  limit = request.args.get("limit", 10)
+  page = int(request.args.get("page", 1))
+  limit = int(request.args.get("limit", 10))
   if not bool(currentPipeline):  # if it's empty
     currentPipeline = []
   elif isinstance(currentPipeline, dict):

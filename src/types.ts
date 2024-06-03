@@ -18,11 +18,13 @@ export type BulmaSize = "small" | "normal" | "medium" | "large"
 
 export type QueryResults = {
   pages: {
-    first?: number;
-    prev?: number;
-    curr: number;
-    next?: number;
-    last?: number;
+    first?: string;
+    prev?: string;
+    curr: string;
+    next?: string;
+    last?: string;
+    docCount: number;
+    totalPageCount: number;
   },
   data: Book[];
 }
