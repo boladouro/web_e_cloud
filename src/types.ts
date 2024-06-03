@@ -16,20 +16,13 @@ export interface Book {
 
 export type BulmaSize = "small" | "normal" | "medium" | "large"
 
-export interface filters {
-  category?: Set<string>
-  price?: [number, number]
-  publishedDate?: [Date?, Date?]
-  author?: string
-  title?: string
-  sort?: "score" | "publishedDate" | "price" | "-score" | "-publishedDate" | "-price"
-}
-
-export type filtersKeys = keyof filters
-
-export interface PaginationLinks {
-  first: [number, string]
-  prev?: [number, string] // if it's the first page, there's no prev
-  next?: [number, string]
-  last: [number, string]
+export type QueryResults = {
+  pages: {
+    first?: number;
+    prev?: number;
+    curr: number;
+    next?: number;
+    last?: number;
+  },
+  data: Book[];
 }

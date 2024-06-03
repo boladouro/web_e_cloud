@@ -1,4 +1,4 @@
-import { Book, PaginationLinks } from "../types.ts";
+import { Book, QueryResults } from "../types.ts";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import BookComponent from "../Components/BookComponent.tsx";
 import React, { useEffect, useState } from "react";
@@ -12,8 +12,9 @@ import {
 } from "@/Components/ui/pagination";
 
 export default function Search() {
-  const loaderData = useLoaderData() as [Book[], PaginationLinks?];
-  const [books, paginationLinks] = loaderData;
+  const loaderData = useLoaderData() as QueryResults;
+  console.log(loaderData)
+  const { data: books, pages: paginationLinks } = loaderData;
   const [renderPagination, setRenderPagination] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,8 +29,8 @@ export default function Search() {
   const currPage = parseInt(searchParams.get("page") ?? "1");
 
   if (!Array.isArray(books)) {
-    console.error("books is not an array", books);
-    return <div>Error loading books.</div>;
+    console.error("books is not an array: ", books);
+    return <div>Error loading books</div>;
   }
 
   return (

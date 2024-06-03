@@ -14,7 +14,6 @@ const HomeH1 = styled.h1`
 `;
 
 function Home() {
-  const numberOfBooksForSlider = 8
   const fetchFeaturedBooks: () => Promise<Book[]> = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/api/v1/books/featured`);
