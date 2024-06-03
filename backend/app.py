@@ -114,10 +114,12 @@ def paginate(db, currentPipeline: list | dict):
 @apiName GetBooks
 @apiGroup Book
 
-@apiQuery   {string}   q                      The query to search; will search between title, isbn, shortDescription, and longDescription
+@apiQuery   {string}       [q]                    The query to search; will search between title, isbn, shortDescription, and longDescription
+@apiQuery   {int}          page=1                 The page of the query, which depends on the limit
+@apiQuery   {int}          limit=10               The amount of books that each page has               
 
+@apiSuccess {array}        data                   Array of books result of query, limited by the limit param
 
-@apiSuccess {array}    data                   Array of books result of query, limited by the limit param
 
 @apiSuccess {array}        pages                  An array with the first element having the pages.
 @apiSuccess {int}          pages.0.docCount       Total books of the query
@@ -128,8 +130,8 @@ def paginate(db, currentPipeline: list | dict):
 @apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
 @apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
 
-@apiSuccessExample {json} Success-Response:
-
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
 {
   "data": [{...}, {...}, {...}],
   "pages": [
@@ -144,7 +146,6 @@ def paginate(db, currentPipeline: list | dict):
     }
   ]
 }
-     
 """
 @app.route("/api/v1/books", methods=["GET"]) # /books/ leads to 404
 def get_books():
@@ -159,6 +160,51 @@ def get_books():
   })
 
 
+"""
+@api {get} /api/v1/books/:id Get a book by its id
+@apiName GetBook
+@apiGroup Book
+
+@apiParam {int} id The book id
+
+@apiSuccess {object} $ The book object
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "_id": {
+    "$oid": "66493ab03f5176065151d376"
+  },
+  "id": "1",
+  "title": "Unlocking Android",
+  "isbn": "1933988673",
+  "pageCount": 416,
+  "publishedDate": {
+    "$date": "2009-04-01T07:00:00Z"
+  },
+  "thumbnailUrl": "https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson.jpg",
+  "shortDescription": "A short description",
+  "longDescription": "A reaaaally long description",
+  "status": "PUBLISH",
+  "authors": [
+    "W. Frank Ableson",
+    "Charlie Collins",
+    "Robi Sen"
+  ],
+  "categories": [
+    "Open Source",
+    "Mobile"
+  ],
+  "score": 5,
+  "price": 26
+}
+
+@apiErrorExample {json} Error-Response:
+HTTP/1.1 404 Not Found
+{
+  "error": "Book not found"
+}
+"""
 @app.route("/api/v1/books/<int:book_id>", methods=["GET"])
 def get_book(book_id: int):
     book_id_str = str(book_id)
@@ -176,7 +222,36 @@ def get_book(book_id: int):
         return jsonify({"error": "An internal error occurred"}), 500
 
 
-# 3
+"""
+@api {post} /api/v1/books Create a book
+@apiName CreateBook
+@apiGroup Book
+
+@apiQuery {json} book The book info
+@apiQuery {string} token The token to access the API
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 201 Created
+{
+  "success": true
+}
+@apiErrorExample {json} 400:
+HTTP/1.1 400 Bad Request
+{
+  "error": "book arg is missing"
+}
+@apiErrorExample {json} 401:
+HTTP/1.1 401 Unauthorized
+{
+  "error": "token expired",
+  "expirado": true
+}
+@apiErrorExample {json} 407:
+HTTP/1.1 407 Proxy Authentication Required
+{
+  "error": "Token is missing!"
+}
+"""
 @app.route("/api/v1/books", methods=["POST"])
 @token_required
 def create_book():
@@ -187,17 +262,71 @@ def create_book():
   return {"success": True}, 201
 
 
-# 4
+"""
+@api {delete} /api/v1/books/:id Delete a book by its id
+@apiName DeleteBook
+@apiGroup Book
+
+@apiParam {int} id The book id
+@apiQuery {string} token The token to access the API
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "success": true
+}
+@apiErrorExample {json} 401:
+HTTP/1.1 401 Unauthorized
+{
+  "error": "token expired",
+  "expirado": true
+}
+@apiErrorExample {json} 407:
+HTTP/1.1 407 Proxy Authentication Required
+{
+  "error": "Token is missing!"
+}
+"""
 @app.route("/api/v1/books/<int:book_id>", methods=["DELETE"])
 @token_required
 def delete_book(book_id):
-  db.books.deleteOne({
+  db.books.deleteOne({ # TODO throw 404 if not found
     "id": book_id
   })
   return {"success": True}, 200
 
 
-# 5
+"""
+@api {put} /api/v1/books/:id Update a book by its id
+@apiName UpdateBook
+@apiGroup Book
+
+@apiParam {int} id The book id
+@apiQuery {json} book The book info
+@apiQuery {string} token The token to access the API
+
+@apiSuccessExample {json} 201:
+HTTP/1.1 201 Created
+{
+  "success": true
+}
+@apiErrorExample {json} 400:
+HTTP/1.1 400 Bad Request
+{
+  "error": "book arg is missing"
+}
+@apiErrorExample {json} 401:
+HTTP/1.1 401 Unauthorized
+{
+  "error": "token expired",
+  "expirado": true
+}
+@apiErrorExample {json} 407:
+HTTP/1.1 407 Proxy Authentication Required
+{
+  "error": "Token is missing!"
+}
+"""
 @app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
 @token_required
 def update_book(book_id):
@@ -208,7 +337,21 @@ def update_book(book_id):
   return {"success": True}, 201
 
 
-# 6
+"""
+@api {get} /api/v1/books/featured Get the featured books
+@apiName GetFeaturedBooks
+@apiGroup Book
+
+@apiSuccess {array} data Array of 5 books featured
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+[
+  {...},
+  {...},
+  {...}
+]
+"""
 @app.route("/api/v1/books/featured", methods=["GET"])
 def get_featured_books():
   return list(db.books.aggregate([
@@ -233,13 +376,61 @@ def get_featured_books():
   ]))
 
 
-# 7
+"""
+@api {get} /api/v1/books/total Get the total amount of books
+@apiName GetTotalBooks
+@apiGroup Book
+
+@apiSuccess {int} count The total amount of books
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "count": 1000
+}
+"""
 @app.route("/api/v1/books/total", methods=["GET"])
 def get_total_books():
   return {"count": db.books.count_documents({})}
 
 
-# 8
+"""
+@api {get} /api/v1/books/autor/:autor Get books by author, with pagination
+@apiName GetBooksByAuthor
+@apiGroup Book
+
+@apiParam {string} autor The author name
+@apiQuery {int} page=1 The page of the query, which depends on the limit
+@apiQuery {int} limit=10 The amount of books that each page has
+
+@apiSuccess {array} data Array of books by the author
+
+@apiSuccess {array}        pages                  An array with the first element having the pages.
+@apiSuccess {int}          pages.0.docCount       Total books of the query
+@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.0.curr           Link for the current page
+@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "data": [{...}, {...}, {...}],
+  "pages": [
+    {
+      "docCount": 100,
+      "totalPageCount": 10,
+      "first": "/api/v1/books/autor/foo?page=1",
+      "prev": "/api/v1/books/autor/foo?page=2",
+      "curr": "/api/v1/books/autor/foo?page=3",
+      "next": "/api/v1/books/autor/foo?page=4",
+      "last": "/api/v1/books/autor/foo?page=10"
+    }
+  ]
+}
+"""
 @app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
 def get_books_author(autor: str):
   return paginate(db.books, {
@@ -247,7 +438,43 @@ def get_books_author(autor: str):
   })
 
 
-# 9
+"""
+@api {get} /api/v1/books/ano/:ano Get books filtered by year, with pagination
+@apiName GetBooksByYear
+@apiGroup Book
+
+@apiParam {int} ano The year
+@apiQuery {int} page=1 The page of the query, which depends on the limit
+@apiQuery {int} limit=10 The amount of books that each page has
+
+@apiSuccess {array} data Array of books by the year
+
+@apiSuccess {array}        pages                  An array with the first element having the pages.
+@apiSuccess {int}          pages.0.docCount       Total books of the query
+@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.0.curr           Link for the current page
+@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "data": [{...}, {...}, {...}],
+  "pages": [
+    {
+      "docCount": 100,
+      "totalPageCount": 10,
+      "first": "/api/v1/books/ano/2000?page=1",
+      "prev": "/api/v1/books/ano/2000?page=2",
+      "curr": "/api/v1/books/ano/2000?page=3",
+      "next": "/api/v1/books/ano/2000?page=4",
+      "last": "/api/v1/books/ano/2000?page=10"
+    }
+  ]
+}
+"""
 @app.route("/api/v1/books/ano/<int:ano>")
 def get_book_ano(ano: int):
   start = datetime(ano, 1, 1)
@@ -260,13 +487,80 @@ def get_book_ano(ano: int):
   })
 
 
-@app.route("/api/v1/books/categories/")
+"""
+@api {get} /api/v1/books/categorias Get all books categories
+@apiName GetBooksCategories
+@apiGroup Book
+
+@apiSuccess {array} $ Array of all books categories
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+[
+  "Client-Server",
+  "Computer Graphics",
+  "Internet",
+  "Java",
+  "Microsoft",
+  "Microsoft .NET",
+  "Miscellaneous",
+  "Mobile",
+  "Networking",
+  "Next Generation Databases",
+  "Object-Oriented Programming",
+  "Open Source",
+  "PowerBuilder",
+  "Programming",
+  "Python",
+  "S",
+  "Software Engineering",
+  "Theory",
+  "Web Development"
+]
+"""
+@app.route("/api/v1/books/categorias/")
 def get_books_categories():
   return list(db.books.distinct("categories"))  # not indexed but that's a future problem
 
 
-# 10
-@app.route("/api/v1/books/categories/<string:categorias>")
+"""
+@api {get} /api/v1/books/categorias/:categorias Get books by categories, with pagination
+@apiName GetBooksByCategories
+@apiGroup Book
+
+@apiParam {string} categorias The categories, separated by commas
+@apiQuery {int} page=1 The page of the query, which depends on the limit
+@apiQuery {int} limit=10 The amount of books that each page has
+
+@apiSuccess {array} data Array of books by the categories
+
+@apiSuccess {array}        pages                  An array with the first element having the pages.
+@apiSuccess {int}          pages.0.docCount       Total books of the query
+@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.0.curr           Link for the current page
+@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "data": [{...}, {...}, {...}],
+  "pages": [
+    {
+      "docCount": 100,
+      "totalPageCount": 10,
+      "first": "/api/v1/books/categorias/foo?page=1",
+      "prev": "/api/v1/books/categorias/foo?page=2",
+      "curr": "/api/v1/books/categorias/foo?page=3",
+      "next": "/api/v1/books/categorias/foo?page=4",
+      "last": "/api/v1/books/categorias/foo?page=10"
+    }
+  ]
+}
+"""
+@app.route("/api/v1/books/categorias/<string:categorias>")
 def get_books_category(categorias: str):
   categorias = categorias.split(",")
   return paginate(db.books, {
@@ -274,7 +568,45 @@ def get_books_category(categorias: str):
   })
 
 
-# 11
+"""
+@api {get} /api/v1/books/price Get books by price, with pagination
+@apiName GetBooksByPrice
+@apiGroup Book
+
+@apiQuery {int} minPrice=0 The minimum price
+@apiQuery {int} maxPrice=1000 The maximum price
+@apiQuery {string} orderBy=asc The order of the books, can be asc or desc
+@apiQuery {int} page=1 The page of the query, which depends on the limit
+@apiQuery {int} limit=10 The amount of books that each page has
+
+@apiSuccess {array} data Array of books by the price
+
+@apiSuccess {array}        pages                  An array with the first element having the pages.
+@apiSuccess {int}          pages.0.docCount       Total books of the query
+@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.0.curr           Link for the current page
+@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "data": [{...}, {...}, {...}],
+  "pages": [
+    {
+      "docCount": 100,
+      "totalPageCount": 10,
+      "first": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=1",
+      "prev": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=2",
+      "curr": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=3",
+      "next": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=4",
+      "last": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=10"
+    }
+  ]
+}
+"""
 @app.route("/api/v1/books/price/")
 def get_books_price():
   try:
@@ -293,7 +625,19 @@ def get_books_price():
   ])
 
 
-# 12 (1) # há dois 12s
+"""
+@api {post} /api/v1/books/cart Save the user cart
+@apiName SaveCart
+@apiGroup Cart
+
+@apiQuery {json} cart The cart object, either an array or an object, depending on the implementation
+
+@apiSuccessExample {json} 201:
+HTTP/1.1 201 Created
+{
+  "success": true
+}
+"""
 @app.route("/api/v1/books/cart", methods=["POST"])
 def add_to_cart():
   cart = json_util.loads(request.args.get("cart", False)) # I have no idea how cart should be formated but idc
@@ -306,7 +650,42 @@ def add_to_cart():
   return {"success": True}, 201
 
 
-# 12 (2)
+"""
+@api {post} /api/v1/user/signup Create a user without permissions
+@apiName Signup
+@apiGroup Auth
+
+@apiQuery {string} username The username
+@apiQuery {string} password The password
+@apiQuery {string} token The token to access the API
+
+@apiSuccessExample {json} 201:
+HTTP/1.1 201 Created
+{
+  "success": true
+}
+@apiErrorExample {json} 400:
+HTTP/1.1 400 Bad Request
+{
+  "error": "Missing username or password"
+}
+@apiErrorExample {json} 409:
+HTTP/1.1 409 Conflict
+{
+  "error": "Username already taken"
+}
+@apiErrorExample {json} 401:
+HTTP/1.1 401 Unauthorized
+{
+  "error": "token expired",
+  "expirado": true
+}
+@apiErrorExample {json} 407:
+HTTP/1.1 407 Proxy Authentication Required
+{
+  "error": "Token is missing!"
+}
+"""
 @app.route("/api/v1/user/signup", methods=["POST"])
 def signup():
   username = request.args.get("username", False)
@@ -325,7 +704,37 @@ def signup():
   return {"success": True}, 201
 
 
-# 13
+"""
+@api {post} /api/v1/user/login Login a user (if it's confirmed), returning a token
+@apiName Login
+@apiGroup Auth
+
+@apiQuery {string} username The username
+@apiQuery {string} password The password
+
+@apiSuccess {string} token The token to access the API, valid for 30 minutes
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "token": "thetokentheuserwillreceive"
+}
+@apiErrorExample {json} 400:
+HTTP/1.1 400 Bad Request
+{
+  "error": "Missing username or password"
+}
+@apiErrorExample {json} 401:
+HTTP/1.1 401 Unauthorized
+{
+  "error": "Invalid username or password"
+}
+@apiErrorExample {json} 403:
+HTTP/1.1 403 Forbidden
+{
+  "error": "User not confirmed"
+}
+"""
 @app.route("/api/v1/user/login", methods=["POST"])
 def login():
   username = request.args.get("username", False)
@@ -344,7 +753,41 @@ def login():
   return {"token": token}, 200
 
 
-# 14
+"""
+@api {post} /api/v1/user/confirmation Confirm a user
+@apiName Confirmation
+@apiGroup Auth
+
+@apiQuery {string} username The username
+@apiQuery {string} token The token to access the API
+
+@apiSuccessExample {json} 200:
+HTTP/1.1 200 OK
+{
+  "success": true
+}
+@apiErrorExample {json} 400:
+HTTP/1.1 400 Bad Request
+{
+  "error": "Missing username"
+}
+@apiErrorExample {json} 404:
+HTTP/1.1 404 Not Found
+{
+  "error": "User not found"
+}
+@apiErrorExample {json} 401:
+HTTP/1.1 401 Unauthorized
+{
+  "error": "token expired",
+  "expirado": true
+}
+@apiErrorExample {json} 407:
+HTTP/1.1 407 Proxy Authentication Required
+{
+  "error": "Token is missing!"
+}
+"""
 @app.route("/api/v1/user/confirmation", methods=["POST"])
 @token_required
 def confirmation():
