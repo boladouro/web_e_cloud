@@ -103,6 +103,12 @@ def paginate(db, currentPipeline: list | dict):
         ]
       }
     },
+    {
+      "$project": {
+        "data": 1,
+        "pages": {"$arrayElemAt": ["$pages", 0]},
+      }
+    }
   ])
   # import json
   # print(json.dumps(currentPipeline, indent=2))
@@ -121,30 +127,28 @@ def paginate(db, currentPipeline: list | dict):
 @apiSuccess {array}        data                   Array of books result of query, limited by the limit param
 
 
-@apiSuccess {array}        pages                  An array with the first element having the pages.
-@apiSuccess {int}          pages.0.docCount       Total books of the query
-@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
-@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
-@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
-@apiSuccess {string}       pages.0.curr           Link for the current page
-@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
-@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+@apiSuccess {object}        pages                  The object containing the info for constructing the pages having the pages.
+@apiSuccess {int}          pages.docCount       Total books of the query
+@apiSuccess {int}          pages.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.curr           Link for the current page
+@apiSuccess {string|null}  pages.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.last           Link for the last page, if next isn't it
 
 @apiSuccessExample {json} 200:
 HTTP/1.1 200 OK
 {
   "data": [{...}, {...}, {...}],
-  "pages": [
-    {
-      "docCount": 100,
-      "totalPageCount": 10,
-      "first": "/api/v1/books?q=foo&page=1",
-      "prev": "/api/v1/books?q=foo&page=2",
-      "curr": "/api/v1/books?q=foo&page=3",
-      "next": "/api/v1/books?q=foo&page=4",
-      "last": "/api/v1/books?q=foo&page=10"
-    }
-  ]
+  "pages": {
+    "docCount": 100,
+    "totalPageCount": 10,
+    "first": "/api/v1/books?q=foo&page=1",
+    "prev": "/api/v1/books?q=foo&page=2",
+    "curr": "/api/v1/books?q=foo&page=3",
+    "next": "/api/v1/books?q=foo&page=4",
+    "last": "/api/v1/books?q=foo&page=10"
+  }
 }
 """
 @app.route("/api/v1/books", methods=["GET"]) # /books/ leads to 404
@@ -405,30 +409,28 @@ def get_total_books():
 
 @apiSuccess {array} data Array of books by the author
 
-@apiSuccess {array}        pages                  An array with the first element having the pages.
-@apiSuccess {int}          pages.0.docCount       Total books of the query
-@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
-@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
-@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
-@apiSuccess {string}       pages.0.curr           Link for the current page
-@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
-@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+@apiSuccess {object}        pages                  The object containing the info for constructing the pages having the pages.
+@apiSuccess {int}          pages.docCount       Total books of the query
+@apiSuccess {int}          pages.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.curr           Link for the current page
+@apiSuccess {string|null}  pages.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.last           Link for the last page, if next isn't it
 
 @apiSuccessExample {json} 200:
 HTTP/1.1 200 OK
 {
   "data": [{...}, {...}, {...}],
-  "pages": [
-    {
-      "docCount": 100,
-      "totalPageCount": 10,
-      "first": "/api/v1/books/autor/foo?page=1",
-      "prev": "/api/v1/books/autor/foo?page=2",
-      "curr": "/api/v1/books/autor/foo?page=3",
-      "next": "/api/v1/books/autor/foo?page=4",
-      "last": "/api/v1/books/autor/foo?page=10"
-    }
-  ]
+  "pages": {
+    "docCount": 100,
+    "totalPageCount": 10,
+    "first": "/api/v1/books/autor/foo?page=1",
+    "prev": "/api/v1/books/autor/foo?page=2",
+    "curr": "/api/v1/books/autor/foo?page=3",
+    "next": "/api/v1/books/autor/foo?page=4",
+    "last": "/api/v1/books/autor/foo?page=10"
+  }
 }
 """
 @app.route("/api/v1/books/autor/<string:autor>", methods=["GET"])
@@ -449,30 +451,28 @@ def get_books_author(autor: str):
 
 @apiSuccess {array} data Array of books by the year
 
-@apiSuccess {array}        pages                  An array with the first element having the pages.
-@apiSuccess {int}          pages.0.docCount       Total books of the query
-@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
-@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
-@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
-@apiSuccess {string}       pages.0.curr           Link for the current page
-@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
-@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+@apiSuccess {object}        pages                  The object containing the info for constructing the pages having the pages.
+@apiSuccess {int}          pages.docCount       Total books of the query
+@apiSuccess {int}          pages.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.curr           Link for the current page
+@apiSuccess {string|null}  pages.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.last           Link for the last page, if next isn't it
 
 @apiSuccessExample {json} 200:
 HTTP/1.1 200 OK
 {
   "data": [{...}, {...}, {...}],
-  "pages": [
-    {
-      "docCount": 100,
-      "totalPageCount": 10,
-      "first": "/api/v1/books/ano/2000?page=1",
-      "prev": "/api/v1/books/ano/2000?page=2",
-      "curr": "/api/v1/books/ano/2000?page=3",
-      "next": "/api/v1/books/ano/2000?page=4",
-      "last": "/api/v1/books/ano/2000?page=10"
-    }
-  ]
+  "pages": {
+    "docCount": 100,
+    "totalPageCount": 10,
+    "first": "/api/v1/books/ano/2000?page=1",
+    "prev": "/api/v1/books/ano/2000?page=2",
+    "curr": "/api/v1/books/ano/2000?page=3",
+    "next": "/api/v1/books/ano/2000?page=4",
+    "last": "/api/v1/books/ano/2000?page=10"
+  }
 }
 """
 @app.route("/api/v1/books/ano/<int:ano>")
@@ -534,30 +534,28 @@ def get_books_categories():
 
 @apiSuccess {array} data Array of books by the categories
 
-@apiSuccess {array}        pages                  An array with the first element having the pages.
-@apiSuccess {int}          pages.0.docCount       Total books of the query
-@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
-@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
-@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
-@apiSuccess {string}       pages.0.curr           Link for the current page
-@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
-@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+@apiSuccess {object}        pages                  The object containing the info for constructing the pages having the pages.
+@apiSuccess {int}          pages.docCount       Total books of the query
+@apiSuccess {int}          pages.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.curr           Link for the current page
+@apiSuccess {string|null}  pages.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.last           Link for the last page, if next isn't it
 
 @apiSuccessExample {json} 200:
 HTTP/1.1 200 OK
 {
   "data": [{...}, {...}, {...}],
-  "pages": [
-    {
-      "docCount": 100,
-      "totalPageCount": 10,
-      "first": "/api/v1/books/categorias/foo?page=1",
-      "prev": "/api/v1/books/categorias/foo?page=2",
-      "curr": "/api/v1/books/categorias/foo?page=3",
-      "next": "/api/v1/books/categorias/foo?page=4",
-      "last": "/api/v1/books/categorias/foo?page=10"
-    }
-  ]
+  "pages":{
+    "docCount": 100,
+    "totalPageCount": 10,
+    "first": "/api/v1/books/categorias/foo?page=1",
+    "prev": "/api/v1/books/categorias/foo?page=2",
+    "curr": "/api/v1/books/categorias/foo?page=3",
+    "next": "/api/v1/books/categorias/foo?page=4",
+    "last": "/api/v1/books/categorias/foo?page=10"
+  }
 }
 """
 @app.route("/api/v1/books/categorias/<string:categorias>")
@@ -581,30 +579,28 @@ def get_books_category(categorias: str):
 
 @apiSuccess {array} data Array of books by the price
 
-@apiSuccess {array}        pages                  An array with the first element having the pages.
-@apiSuccess {int}          pages.0.docCount       Total books of the query
-@apiSuccess {int}          pages.0.totalPageCount Number of pages the query is capable
-@apiSuccess {string|null}  pages.0.first          Link for the first page, if prev isn't it
-@apiSuccess {string|null}  pages.0.prev           Link for the previous page, if current isn't it
-@apiSuccess {string}       pages.0.curr           Link for the current page
-@apiSuccess {string|null}  pages.0.next           Link for the next page, if current isn't last
-@apiSuccess {string|null}  pages.0.last           Link for the last page, if next isn't it
+@apiSuccess {object}        pages                  The object containing the info for constructing the pages having the pages.
+@apiSuccess {int}          pages.docCount       Total books of the query
+@apiSuccess {int}          pages.totalPageCount Number of pages the query is capable
+@apiSuccess {string|null}  pages.first          Link for the first page, if prev isn't it
+@apiSuccess {string|null}  pages.prev           Link for the previous page, if current isn't it
+@apiSuccess {string}       pages.curr           Link for the current page
+@apiSuccess {string|null}  pages.next           Link for the next page, if current isn't last
+@apiSuccess {string|null}  pages.last           Link for the last page, if next isn't it
 
 @apiSuccessExample {json} 200:
 HTTP/1.1 200 OK
 {
   "data": [{...}, {...}, {...}],
-  "pages": [
-    {
-      "docCount": 100,
-      "totalPageCount": 10,
-      "first": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=1",
-      "prev": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=2",
-      "curr": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=3",
-      "next": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=4",
-      "last": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=10"
-    }
-  ]
+  "pages": {
+    "docCount": 100,
+    "totalPageCount": 10,
+    "first": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=1",
+    "prev": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=2",
+    "curr": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=3",
+    "next": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=4",
+    "last": "/api/v1/books/price?minPrice=0&maxPrice=1000&orderBy=asc&page=10"
+  }
 }
 """
 @app.route("/api/v1/books/price/")
